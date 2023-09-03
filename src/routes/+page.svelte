@@ -1,7 +1,1 @@
-<script>
-	import Tiptap from '$lib/tiptap.svelte';
-</script>
-
-<main>
-	<Tiptap />
-</main>
+<a href="/article">文章列表</a>
