@@ -2,17 +2,19 @@
 	import { slide } from 'svelte/transition';
 	import { replying_paragraph_id } from './store';
 
-	// let comment: string = '';
 	let textarea_element: HTMLTextAreaElement;
+	function createComment() {
+		fetch('/api/', { method: 'POST' });
+	}
 </script>
 
 {#if $replying_paragraph_id != undefined}
 	<div class="replies" transition:slide={{ axis: 'x' }}>
-		<div class="inner">尚無評論</div>
-		<form method="POST" action="?/comment">
+		<div class="inner">
+			尚無評論
 			<label>
 				<textarea
-					name="text"
+					name="content"
 					bind:this={textarea_element}
 					on:input={() => {
 						let height = Math.max(textarea_element.scrollHeight, 24);
@@ -22,8 +24,9 @@
 					class="comment"
 				/>
 			</label>
-			<button>送出</button>
-		</form>
+			<input type="hidden" name="paragraph_id" value={$replying_paragraph_id} />
+			<button on:click={createComment}>送出</button>
+		</div>
 	</div>
 {/if}
 

@@ -4,8 +4,9 @@
 	import Paragraph from './Paragraph.svelte';
 	import { replying_paragraph_id } from './store';
 
-	type Article = PageData['post'];
+	type Article = PageData['article'];
 	export let data: Article;
+	console.log(data);
 
 	onDestroy(() => {
 		replying_paragraph_id.set(undefined);
@@ -13,10 +14,14 @@
 </script>
 
 <div class="article">
-	<h1>{data.title}</h1>
-	{#each data.content.split('\n') as paragrapph, i}
-		<Paragraph content={paragrapph} id={i} />
-	{/each}
+	{#if data}
+		<h1>{data.title}</h1>
+		{#each data.paragraphs as paragrapph}
+			<Paragraph text={paragrapph.text} id={paragrapph.id} />
+		{/each}
+	{:else}
+		<h1>查無此文</h1>
+	{/if}
 </div>
 
 <style>

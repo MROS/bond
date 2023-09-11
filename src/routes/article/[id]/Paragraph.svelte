@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let content: string;
-	export let id: number;
+	export let text: string;
+	export let id: string;
 	import { replying_paragraph_id } from './store';
 
 	function set_id() {
@@ -15,7 +15,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div on:click={set_id} class:selected={$replying_paragraph_id === id}>
-	<p>{content}</p>
+	<p>{text}</p>
 </div>
 
 <style>
