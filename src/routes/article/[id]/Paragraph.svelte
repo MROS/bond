@@ -1,20 +1,21 @@
 <script lang="ts">
 	export let text: string;
 	export let id: string;
-	import { replying_paragraph_id } from './store';
+	import { replyingParagraphId } from './store';
 
-	function set_id() {
-		if ($replying_paragraph_id != id) {
-			replying_paragraph_id.set(id);
+	function setId() {
+		console.log('點擊段落');
+		if ($replyingParagraphId != id) {
+			replyingParagraphId.set(id);
 			return;
 		}
-		replying_paragraph_id.set(undefined);
+		replyingParagraphId.set(undefined);
 	}
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<div on:click={set_id} class:selected={$replying_paragraph_id === id}>
+<div on:click={setId} class:selected={$replyingParagraphId === id}>
 	<p>{text}</p>
 </div>
 

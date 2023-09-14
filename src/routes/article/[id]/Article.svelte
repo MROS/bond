@@ -2,14 +2,14 @@
 	import { onDestroy } from 'svelte';
 	import type { PageData } from './$types';
 	import Paragraph from './Paragraph.svelte';
-	import { replying_paragraph_id } from './store';
+	import { replyingParagraphId } from './store';
 
 	type Article = PageData['article'];
 	export let data: Article;
 	console.log(data);
 
 	onDestroy(() => {
-		replying_paragraph_id.set(undefined);
+		replyingParagraphId.set(undefined);
 	});
 </script>
 

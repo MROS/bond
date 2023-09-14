@@ -1,2 +1,2 @@
 import { writable } from 'svelte/store';
-export const replying_paragraph_id = writable<string | undefined>(undefined);
+export const replyingParagraphId = writable<string | undefined>(undefined);
