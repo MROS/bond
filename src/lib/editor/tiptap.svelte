@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
-	import StarterKit from '@tiptap/starter-kit';
+	import Document from '@tiptap/extension-document';
+	import Paragraph from '@tiptap/extension-paragraph';
+	import Text from '@tiptap/extension-text';
+	import Heading from '@tiptap/extension-heading';
 	import Icon from '@iconify/svelte';
 
 	let element: HTMLDivElement;
@@ -10,7 +13,7 @@
 	onMount(() => {
 		editor = new Editor({
 			element: element,
-			extensions: [StarterKit],
+			extensions: [Document, Paragraph, Text, Heading.configure({ levels: [1, 2, 3] })],
 			content: '<p>正文在此</p>',
 			onTransaction: () => {
 				// force re-render so `editor.isActive` works as expected

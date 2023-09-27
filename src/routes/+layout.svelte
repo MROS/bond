@@ -14,6 +14,10 @@
 />
 
 <style>
+	:root {
+		/* 覆蓋 sanitize.css 的 cursor: default */
+		cursor: auto;
+	}
 	.header {
 		position: sticky;
 		top: 0px;
