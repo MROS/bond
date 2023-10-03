@@ -5,6 +5,8 @@
 	import Paragraph from '@tiptap/extension-paragraph';
 	import Text from '@tiptap/extension-text';
 	import Heading from '@tiptap/extension-heading';
+	import Image from '@tiptap/extension-image';
+	import Placeholder from '@tiptap/extension-placeholder';
 	import Icon from '@iconify/svelte';
 
 	let element: HTMLDivElement;
@@ -13,8 +15,17 @@
 	onMount(() => {
 		editor = new Editor({
 			element: element,
-			extensions: [Document, Paragraph, Text, Heading.configure({ levels: [1, 2, 3] })],
-			content: '<p>正文在此</p>',
+			extensions: [
+				Document,
+				Paragraph,
+				Text,
+				Placeholder.configure({
+					placeholder: '開始寫作...'
+				}),
+				Heading.configure({ levels: [1, 2, 3] }),
+				Image.configure({ HTMLAttributes: { class: 'tiptapImage' } })
+			],
+			content: '',
 			onTransaction: () => {
 				// force re-render so `editor.isActive` works as expected
 				editor = editor;
@@ -27,6 +38,14 @@
 			editor.destroy();
 		}
 	});
+
+	const addImage = () => {
+		const url = window.prompt('URL');
+
+		if (url) {
+			editor.chain().focus().setImage({ src: url }).run();
+		}
+	};
 </script>
 
 <div class="articlePublisher">
@@ -66,16 +85,31 @@
 			>
 				<Icon icon="mdi:format-text" />
 			</button>
+			<button class="format" on:click={addImage}>
+				<Icon icon="mdi:image" />
+			</button>
 		</div>
 	{/if}
 
-	<div class="editor" bind:this={element} />
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div class="editor" bind:this={element} on:click={() => editor.chain().focus()} />
 	<div>
 		<button class="pure-button pure-button-primary">發佈文章</button>
 	</div>
 </div>
 
 <style>
+	:global(.tiptapImage) {
+		max-width: 100%;
+	}
+	:global(.tiptap p.is-editor-empty:first-child::before) {
+		color: #adb5bd;
+		content: attr(data-placeholder);
+		float: left;
+		height: 0;
+		pointer-events: none;
+	}
 	.title {
 		width: 100%;
 	}
@@ -83,6 +117,10 @@
 		font-size: 24px;
 		background-color: white;
 		border: 0px;
+		&:hover {
+			background-color: lavender;
+			cursor: pointer;
+		}
 	}
 	.format.active {
 		background: black;

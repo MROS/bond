@@ -37,14 +37,18 @@
 	"dependencies": {
 		"@iconify/svelte": "^3.1.4",
 		"@prisma/client": "5.2.0",
-		"@tiptap/core": "^2.0.4",
+		"@rgossiaux/svelte-headlessui": "^2.0.0",
+		"@tiptap/core": "^2.1.11",
 		"@tiptap/extension-document": "^2.1.11",
 		"@tiptap/extension-heading": "^2.1.11",
+		"@tiptap/extension-image": "^2.1.11",
 		"@tiptap/extension-paragraph": "^2.1.11",
+		"@tiptap/extension-placeholder": "^2.1.11",
 		"@tiptap/extension-text": "^2.1.11",
-		"@tiptap/pm": "^2.0.4",
+		"@tiptap/pm": "^2.1.11",
 		"@trpc/client": "^10.38.1",
 		"@trpc/server": "^10.38.1",
+		"model": "link:@tiptap/pm/model",
 		"trpc-sveltekit": "^3.5.20",
 		"zod": "^3.22.2"
 	}

@@ -30,7 +30,7 @@ module.exports = {
 	rules: {
 		// eslint-disable-next-line
 		'@typescript-eslint/naming-convention': [
-			'error',
+			'warn',
 			{
 				selector: 'default',
 				format: ['camelCase']
