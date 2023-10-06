@@ -8,6 +8,10 @@
 	import Image from '@tiptap/extension-image';
 	import Placeholder from '@tiptap/extension-placeholder';
 	import Icon from '@iconify/svelte';
+	import { imageModalIsOpen, imageUrl, confirmCallback } from './image/store';
+	import { bondModalIsOpen } from './bond/store';
+	import ImageModal from './image/modal.svelte';
+	import BondModal from './bond/modal.svelte';
 
 	let element: HTMLDivElement;
 	let editor: Editor;
@@ -40,11 +44,16 @@
 	});
 
 	const addImage = () => {
-		const url = window.prompt('URL');
-
-		if (url) {
-			editor.chain().focus().setImage({ src: url }).run();
-		}
+		$imageModalIsOpen = true;
+		$confirmCallback = () => {
+			if ($imageUrl.length > 0) {
+				editor.chain().focus().setImage({ src: $imageUrl }).run();
+			}
+		};
+	};
+	const addBond = () => {
+		console.log('add bond');
+		$bondModalIsOpen = true;
 	};
 </script>
 
@@ -88,6 +97,10 @@
 			<button class="format" on:click={addImage}>
 				<Icon icon="mdi:image" />
 			</button>
+			<button class="format" on:click={addBond}>
+				<!-- TODO 改爲碳鍵 logo -->
+				<Icon icon="mdi:format-quote-close" />
+			</button>
 		</div>
 	{/if}
 
@@ -98,6 +111,8 @@
 		<button class="pure-button pure-button-primary">發佈文章</button>
 	</div>
 </div>
+<ImageModal />
+<BondModal />
 
 <style>
 	:global(.tiptapImage) {
@@ -131,6 +146,7 @@
 		flex-direction: column;
 		height: 100%;
 		& .editor {
+			padding: 0px 0.5em;
 			border: 3px solid black;
 			flex: 1;
 			& *:focus {

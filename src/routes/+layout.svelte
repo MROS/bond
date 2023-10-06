@@ -1,5 +1,5 @@
 <header class="header">
-	<a href="/">匯流處</a>
+	<a href="/">無限城</a>
 </header>
 <main class="main">
 	<slot />

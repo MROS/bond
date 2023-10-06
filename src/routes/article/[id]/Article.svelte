@@ -3,10 +3,19 @@
 	import type { PageData } from './$types';
 	import Paragraph from './Paragraph.svelte';
 	import { replyingParagraphId } from './store';
+	import { recentReadArticles } from '$lib/localStorage/store';
 
 	type Article = PageData['article'];
 	export let data: Article;
-	console.log(data);
+	recentReadArticles.update((metas) => {
+		if (data == null) {
+			return metas;
+		}
+		if (metas.some((meta) => meta.id == data!.id)) {
+			return metas;
+		}
+		return [{ id: data.id, title: data.title }, ...metas].slice(0, 10);
+	});
 
 	onDestroy(() => {
 		replyingParagraphId.set(undefined);

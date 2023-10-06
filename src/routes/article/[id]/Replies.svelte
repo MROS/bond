@@ -11,7 +11,7 @@
 			return;
 		}
 		return trpc()
-			.createComment.mutate({ content, paragraphId: $replyingParagraphId })
+			.comment.create.mutate({ content, paragraphId: $replyingParagraphId })
 			.then((comment) => {
 				console.log(`comment created: ${JSON.stringify(comment)}`);
 			});
@@ -29,7 +29,7 @@
 			return;
 		}
 		trpc()
-			.getComment.query({ paragraphId: $replyingParagraphId })
+			.comment.get.query({ paragraphId: $replyingParagraphId })
 			.then((refreshedCmments) => {
 				comments = refreshedCmments;
 			});
