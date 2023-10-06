@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { Dialog, DialogOverlay, DialogTitle } from '@rgossiaux/svelte-headlessui';
 	import {
 		bondModalIsOpen,
@@ -8,6 +8,11 @@
 		confirmCallback
 	} from './store';
 	import { recentReadArticles } from '$lib/localStorage/store';
+	import { trpc } from '$lib/trpc/client';
+	import type { RouterOutput } from '$lib/trpc/routers';
+	import Article from '../../../routes/article/[id]/Article.svelte';
+	type Article = RouterOutput['article']['get'];
+	let selectedArticle: Article | null = null;
 </script>
 
 <Dialog class="modal" open={$bondModalIsOpen} on:close={() => ($bondModalIsOpen = false)}>
@@ -22,17 +27,31 @@
 	<div>
 		最近閱讀
 		<ul>
-			{#each $recentReadArticles as article}
+			{#each $recentReadArticles as articleMeta}
 				<li>
 					<button
 						on:click={() => {
 							// TODO: article id 改爲字串
-							$bondArticleId = `${article.id}`;
-						}}>{article.title}</button
+							$bondArticleId = `${articleMeta.id}`;
+							trpc()
+								.article.get.query({ id: articleMeta.id })
+								.then((article) => {
+									selectedArticle = article;
+								});
+						}}>{articleMeta.title}</button
 					>
 				</li>
 			{/each}
 		</ul>
+		<div>
+			{#if selectedArticle}
+				<ul>
+					{#each selectedArticle.paragraphs as paragraph}
+						<li>{paragraph.text}</li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
 	</div>
 	<div>
 		態度
