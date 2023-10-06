@@ -1,11 +1,13 @@
 import type { PageServerLoad } from './$types';
-import db from '$lib/db';
+import { createContext } from '$lib/trpc/context';
+import { rootRouter } from '$lib/trpc/routers';
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+	const { params } = event;
 	return {
-		article: await db.article.findFirst({
-			where: { id: parseInt(params.id) },
-			include: { paragraphs: { orderBy: { order: 'asc' } } }
-		})
+		// TODO(https://github.com/MROS/bond/issues/5)
+		article: await rootRouter.article
+			.createCaller(await createContext(event))
+			.get({ id: parseInt(params.id) })
 	};
 };
