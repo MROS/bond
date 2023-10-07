@@ -1,4 +1,7 @@
 :root {
+    /* 覆蓋 sanitize.css 的 cursor: default */
+    cursor: auto;
+
     /* 100vh 會將行動瀏覽器的功能列一起算進去，造成虛高。遇此情況可以 var(--doc-height) 取代。 */
     --doc-height: 100vh; /* 後備（以防瀏覽器不支援 dvh） */
     --doc-height: 100dvh;

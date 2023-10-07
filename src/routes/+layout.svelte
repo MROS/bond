@@ -1,7 +1,3 @@
-<script>
-	import './variable.css';
-</script>
-
 <header class="header">
 	<div class="left">
 		<a href="/">無限城3.0</a>
@@ -14,7 +10,6 @@
 	<slot />
 </main>
 
-<link href="https://unpkg.com/sanitize.css" rel="stylesheet" />
 <link
 	rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
@@ -23,11 +18,8 @@
 />
 
 <style>
+	@import 'sanitize.css';
 	@import './variable.css';
-	:root {
-		/* 覆蓋 sanitize.css 的 cursor: default */
-		cursor: auto;
-	}
 	.header {
 		position: sticky;
 		top: 0px;

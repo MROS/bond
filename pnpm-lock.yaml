@@ -47,6 +47,9 @@ dependencies:
   model:
     specifier: link:@tiptap/pm/model
     version: link:@tiptap/pm/model
+  sanitize.css:
+    specifier: ^13.0.0
+    version: 13.0.0
   svelte-persisted-store:
     specifier: ^0.7.0
     version: 0.7.0(svelte@4.2.0)
@@ -2213,6 +2216,10 @@ packages:
       mkdirp: 0.5.6
       rimraf: 2.7.1
     dev: true
+
+  /sanitize.css@13.0.0:
+    resolution: {integrity: sha512-ZRwKbh/eQ6w9vmTjkuG0Ioi3HBwPFce0O+v//ve+aOq1oeCy7jMV2qzzAlpsNuqpqCBjjriM1lbtZbF/Q8jVyA==}
+    dev: false
 
   /semver@7.5.4:
     resolution: {integrity: sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==}
