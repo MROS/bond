@@ -1,5 +1,14 @@
+<script>
+	import './variable.css';
+</script>
+
 <header class="header">
-	<a href="/">無限城3.0</a>
+	<div class="left">
+		<a href="/">無限城3.0</a>
+	</div>
+	<div class="right">
+		<button class="pure-button pure-button-active">登入</button>
+	</div>
 </header>
 <main class="main">
 	<slot />
@@ -14,6 +23,7 @@
 />
 
 <style>
+	@import './variable.css';
 	:root {
 		/* 覆蓋 sanitize.css 的 cursor: default */
 		cursor: auto;
@@ -21,14 +31,27 @@
 	.header {
 		position: sticky;
 		top: 0px;
-		display: flex;
-		align-items: center;
-		height: 40px;
+		height: var(--header-height);
 		font-size: 20px;
+
+		padding: 0px 30px;
+
 		background-color: white;
-		padding-left: 30px;
 		border-bottom: 1px solid gainsboro;
 		z-index: 100;
+
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		& button {
+			padding: 0.25em 0.7em;
+		}
+		@media (min-width: 600px) {
+			& button {
+				padding: 0.3em 0.8em;
+			}
+		}
 	}
 	.main {
 		display: flex;

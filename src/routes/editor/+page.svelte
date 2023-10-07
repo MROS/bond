@@ -9,7 +9,7 @@
 <style>
 	.editorPanel {
 		width: 100%;
-		min-height: calc(100vh - 40px);
+		min-height: calc(var(--doc-height) - var(--header-height));
 	}
 	@media (min-width: 600px) {
 		.editorPanel {
