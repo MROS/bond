@@ -1,5 +1,5 @@
 <header class="header">
-	<a href="/">無限城</a>
+	<a href="/">無限城3.0</a>
 </header>
 <main class="main">
 	<slot />

@@ -2,7 +2,7 @@ import { persisted } from 'svelte-persisted-store';
 
 type ArticleMeta = {
 	title: string;
-	id: number;
+	id: string;
 	// author: string;
 	// createTime: Date;
 };

@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const articles = [
 	{
-		id: 0,
+		id: 'KgibARxwROOetDlT0a7se',
 		title: '#公告 時事板 9/27 起實施身份驗證（2021/10/4 更新）',
 		content: `為維護時事板討論品質，9/27 起將在本板實施身份驗證
 所有欲於時事板進行發文、互動的卡友，必須先完成身分驗證，以繼續參與討論互動
@@ -58,7 +58,7 @@ A: 不會，此身份驗證僅在時事板、COVID-19 及防疫生活板實施�
 感謝卡友的理解和配合！`
 	},
 	{
-		id: 1,
+		id: 'pJ7GQaWKZgVzZ3QX2LRZf',
 		title: '[問卦] 到底誰騙我經濟不好？',
 		content: `出國人超多機場爆滿 我自己上個月剛從歐洲回來很清楚 不相信的自己去機場看
 
@@ -72,7 +72,7 @@ A: 不會，此身份驗證僅在時事板、COVID-19 及防疫生活板實施�
 `
 	},
 	{
-		id: 2,
+		id: '9j8wV69nnOI1zGwMZno8O',
 		title: '[問卦] 九萬跟四萬的125cc機車差在哪裡？',
 		content: `如題
     GP125跟JET SR或勁戰
@@ -85,7 +85,7 @@ A: 不會，此身份驗證僅在時事板、COVID-19 及防疫生活板實施�
     大家太有錢嗎？`
 	},
 	{
-		id: 3,
+		id: '2tZw3CnGr_MvnEyFKyc5N',
 		title: '[小說轉載] 太平妖術',
 		content: `轉載自 https://trow.cc/board/showtopic=49584
 

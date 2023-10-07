@@ -10,7 +10,6 @@
 	import { recentReadArticles } from '$lib/localStorage/store';
 	import { trpc } from '$lib/trpc/client';
 	import type { RouterOutput } from '$lib/trpc/routers';
-	import Article from '../../../routes/article/[id]/Article.svelte';
 	type Article = RouterOutput['article']['get'];
 	let selectedArticle: Article | null = null;
 </script>
@@ -31,8 +30,7 @@
 				<li>
 					<button
 						on:click={() => {
-							// TODO: article id 改爲字串
-							$bondArticleId = `${articleMeta.id}`;
+							$bondArticleId = articleMeta.id;
 							trpc()
 								.article.get.query({ id: articleMeta.id })
 								.then((article) => {
