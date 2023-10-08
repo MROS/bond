@@ -2,11 +2,12 @@
 	import LoginModal from '$lib/components/login/index.svelte';
 	import { loginModalState } from '$lib/components/login/store';
 	import { inject } from '@vercel/analytics';
-	console.log(import.meta.env.VERCEL);
-	console.log(import.meta.env.VERCEL_URL);
-	console.log(import.meta.env.VERCEL_REGION);
-	console.log(import.meta.env.VITE_VERCEL_ENV);
-	if (import.meta.env.VERCEL) {
+	console.log(process.env.IS_VERCEL);
+	console.log(process.env.VERCEL);
+	console.log(process.env.VERCEL_URL);
+	console.log(process.env.VERCEL_REGION);
+	console.log(process.env.VITE_VERCEL_ENV);
+	if (process.env.VERCEL) {
 		console.log('vercel web analytic inject');
 		inject();
 	}
