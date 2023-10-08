@@ -22,8 +22,8 @@ pnpm exec prisma seed
 pnpm dev
 ```
 
-在正式環境使用：
+`pnpm dev` 會啓用含熱更新的開發環境，若想打包後執行，可用以下指令：
 ```sh
 pnpm build
-node build
+node preview
 ```

@@ -12,3 +12,4 @@ vite.config.ts.timestamp-*
 # prisma
 prisma/dev.db
 
+.vercel

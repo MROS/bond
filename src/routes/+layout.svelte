@@ -1,6 +1,11 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/login/index.svelte';
 	import { loginModalState } from '$lib/components/login/store';
+	import { inject } from '@vercel/analytics';
+	if (import.meta.env.VERCEL) {
+		console.log('vercel web analytic inject');
+		inject();
+	}
 </script>
 
 <header class="header">
