@@ -1,10 +1,21 @@
+<script lang="ts">
+	import LoginModal from '$lib/components/login/index.svelte';
+	import { loginModalState } from '$lib/components/login/store';
+</script>
+
 <header class="header">
 	<div class="left">
 		<a href="/">無限城3.0</a>
 	</div>
 	<div class="right">
-		<button class="pure-button pure-button-active">登入</button>
+		<button
+			class="pure-button pure-button-active"
+			on:click={() => {
+				$loginModalState.isOpen = true;
+			}}>登入</button
+		>
 	</div>
+	<LoginModal />
 </header>
 <main class="main">
 	<slot />
