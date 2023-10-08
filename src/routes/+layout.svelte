@@ -1,15 +1,13 @@
 <script lang="ts">
 	import LoginModal from '$lib/components/login/index.svelte';
 	import { loginModalState } from '$lib/components/login/store';
+	import { dev } from '$app/environment';
 	import { inject } from '@vercel/analytics';
-	console.log(process.env.IS_VERCEL);
-	console.log(process.env.VERCEL);
-	console.log(process.env.VERCEL_URL);
-	console.log(process.env.VERCEL_REGION);
-	console.log(process.env.VITE_VERCEL_ENV);
-	if (process.env.VERCEL) {
-		console.log('vercel web analytic inject');
-		inject();
+	import type { LayoutData } from './$types';
+	export let data: LayoutData;
+	if (data.isVercel) {
+		console.log('啓用 Vercel 網頁分析');
+		inject({ mode: dev ? 'development' : 'production' });
 	}
 </script>
 
