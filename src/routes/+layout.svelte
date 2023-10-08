@@ -15,8 +15,8 @@
 			}}>登入</button
 		>
 	</div>
-	<LoginModal />
 </header>
+<LoginModal />
 <main class="main">
 	<slot />
 </main>
