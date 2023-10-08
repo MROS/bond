@@ -9,8 +9,8 @@ cd infinite-city3
 # 安裝依賴
 pnpm i
 
-# 設定資料庫地址
-echo "DATABASE_URL=\"file:./dev.db\"" > .env
+# 設定資料庫地址，需先安裝／設定 PostgreSQL
+echo "postgres://postgres:mypassword@localhost:5432/city" > .env
 
 # 灌入資料庫 schema
 pnpm exec prisma db push
