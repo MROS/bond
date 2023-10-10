@@ -4,9 +4,10 @@
 	import { localStorage } from '$lib/localStorage';
 	import { trpc } from '$lib/trpc/client';
 	import type { RouterOutput } from '$lib/trpc/routers';
+	let { recentReadArticles } = localStorage;
 	type Article = RouterOutput['article']['get'];
 	let selectedArticle: Article | null = null;
-	let { recentReadArticles } = localStorage;
+	let selectedParagraphs: string[] = [];
 </script>
 
 <Dialog
@@ -26,42 +27,56 @@
 		<button>查詢</button>
 	</div> -->
 	<div>
-		最近閱讀
-		<ul>
-			{#each $recentReadArticles as articleMeta}
-				<li>
-					<button
-						on:click={() => {
-							$bondModalState.articleId = articleMeta.id;
-							trpc()
-								.article.get.query({ id: articleMeta.id })
-								.then((article) => {
-									selectedArticle = article;
-								});
-						}}>{articleMeta.title}</button
-					>
-				</li>
-			{/each}
-		</ul>
-		<div>
-			{#if selectedArticle}
-				<ul>
+		{#if selectedArticle}
+			<div>
+				{selectedArticle.title}
+				<button
+					on:click={() => {
+						selectedArticle = null;
+					}}>選擇其他文章</button
+				>
+				<div class="paragraphs">
 					{#each selectedArticle.paragraphs as paragraph}
-						<li>{paragraph.text}</li>
+						<label>
+							<div>
+								<input type="checkbox" value={paragraph.id} bind:group={selectedParagraphs} />
+								{paragraph.text}
+							</div>
+						</label>
+					{/each}
+				</div>
+				<div>
+					態度
+					<select bind:value={$bondModalState.attitude}>
+						{#each attitudes as attitude}
+							<option value={attitude}>
+								{attitude}
+							</option>
+						{/each}
+					</select>
+				</div>
+			</div>
+		{:else}
+			<div>
+				最近閱讀
+				<ul>
+					{#each $recentReadArticles as articleMeta}
+						<li>
+							<button
+								on:click={() => {
+									$bondModalState.articleId = articleMeta.id;
+									trpc()
+										.article.get.query({ id: articleMeta.id })
+										.then((article) => {
+											selectedArticle = article;
+										});
+								}}>{articleMeta.title}</button
+							>
+						</li>
 					{/each}
 				</ul>
-			{/if}
-		</div>
-	</div>
-	<div>
-		態度
-		<select bind:value={$bondModalState.attitude}>
-			{#each attitudes as attitude}
-				<option value={attitude}>
-					{attitude}
-				</option>
-			{/each}
-		</select>
+			</div>
+		{/if}
 	</div>
 
 	<button
@@ -83,6 +98,7 @@
 	:global(.bondModal) {
 		position: fixed;
 		width: 100%;
+		max-height: var(--doc-height);
 		z-index: 200;
 		background-color: white;
 		left: 50%;
@@ -99,6 +115,16 @@
 			left: 0;
 			background-color: rgb(0 0 0);
 			opacity: 0.3;
+		}
+		& .paragraphs {
+			margin: 10px;
+			max-height: 400px;
+			overflow-y: scroll;
+			/* NOTE: 火狐到 110 版都還沒支援 has 關鍵字
+			https://stackoverflow.com/questions/73936048/how-do-you-enable-has-selector-on-firefox */
+			& div:has(input:checked) {
+				background-color: antiquewhite;
+			}
 		}
 	}
 </style>
