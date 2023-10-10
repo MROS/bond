@@ -1,20 +1,22 @@
 <script lang="ts">
 	import { Dialog, DialogOverlay, DialogTitle } from '@rgossiaux/svelte-headlessui';
-	import {
-		bondModalIsOpen,
-		bondAttitude,
-		attitudes,
-		bondArticleId,
-		confirmCallback
-	} from './store';
-	import { recentReadArticles } from '$lib/localStorage/store';
+	import { bondModalState, attitudes } from './store';
+	import { localStorage } from '$lib/localStorage';
 	import { trpc } from '$lib/trpc/client';
 	import type { RouterOutput } from '$lib/trpc/routers';
 	type Article = RouterOutput['article']['get'];
 	let selectedArticle: Article | null = null;
+	let { recentReadArticles } = localStorage;
 </script>
 
-<Dialog class="modal" open={$bondModalIsOpen} on:close={() => ($bondModalIsOpen = false)}>
+<Dialog
+	class="bondModal"
+	open={$bondModalState.isOpen}
+	on:close={() => {
+		$bondModalState.isOpen = false;
+		selectedArticle = null;
+	}}
+>
 	<DialogOverlay class="modalOverlay" />
 
 	<DialogTitle>引用</DialogTitle>
@@ -30,7 +32,7 @@
 				<li>
 					<button
 						on:click={() => {
-							$bondArticleId = articleMeta.id;
+							$bondModalState.articleId = articleMeta.id;
 							trpc()
 								.article.get.query({ id: articleMeta.id })
 								.then((article) => {
@@ -53,7 +55,7 @@
 	</div>
 	<div>
 		態度
-		<select bind:value={$bondAttitude}>
+		<select bind:value={$bondModalState.attitude}>
 			{#each attitudes as attitude}
 				<option value={attitude}>
 					{attitude}
@@ -64,33 +66,39 @@
 
 	<button
 		on:click={() => {
-			if ($confirmCallback) {
-				$confirmCallback();
-				$confirmCallback = null;
+			if ($bondModalState.confirmCallback) {
+				$bondModalState.confirmCallback();
+				$bondModalState.confirmCallback = null;
 			}
-			$bondModalIsOpen = false;
-			$bondArticleId = '';
-			$bondAttitude = '中立';
+			$bondModalState.isOpen = false;
+			$bondModalState.articleId = null;
+			$bondModalState.attitude = '中立';
+			selectedArticle = null;
 		}}>確定</button
 	>
-	<button on:click={() => ($bondModalIsOpen = false)}>取消</button>
+	<button on:click={() => ($bondModalState.isOpen = false)}>取消</button>
 </Dialog>
 
 <style>
-	:global(.modal) {
+	:global(.bondModal) {
 		position: fixed;
-		max-width: 400px;
+		width: 100%;
 		z-index: 200;
+		background-color: white;
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
 		border: 1px solid black;
-	}
-	:global(.modalOverlay) {
-		position: fixed;
-		top: 0;
-		left: 0;
-		background-color: rgb(0 0 0);
-		opacity: 0.3;
+		@media (min-width: 600px) {
+			width: 600px;
+		}
+
+		& :global(.modalOverlay) {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background-color: rgb(0 0 0);
+			opacity: 0.3;
+		}
 	}
 </style>

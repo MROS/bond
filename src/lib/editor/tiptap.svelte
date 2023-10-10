@@ -9,7 +9,7 @@
 	import Placeholder from '@tiptap/extension-placeholder';
 	import Icon from '@iconify/svelte';
 	import { imageModalIsOpen, imageUrl, confirmCallback } from './image/store';
-	import { bondModalIsOpen } from './bond/store';
+	import { bondModalState } from './bond/store';
 	import ImageModal from './image/modal.svelte';
 	import BondModal from './bond/modal.svelte';
 
@@ -53,7 +53,7 @@
 	};
 	const addBond = () => {
 		console.log('add bond');
-		$bondModalIsOpen = true;
+		$bondModalState.isOpen = true;
 	};
 </script>
 

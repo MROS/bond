@@ -8,7 +8,7 @@
 	import { imageModalIsOpen, imageUrl, confirmCallback } from './store';
 </script>
 
-<Dialog class="modal" open={$imageModalIsOpen} on:close={() => ($imageModalIsOpen = false)}>
+<Dialog class="imageModal" open={$imageModalIsOpen} on:close={() => ($imageModalIsOpen = false)}>
 	<DialogOverlay class="modalOverlay" />
 
 	<DialogTitle>插入圖片</DialogTitle>
@@ -32,7 +32,7 @@
 </Dialog>
 
 <style>
-	:global(.modal) {
+	:global(.imageModal) {
 		position: fixed;
 		max-width: 400px;
 		z-index: 200;
@@ -40,12 +40,12 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 		border: 1px solid black;
-	}
-	:global(.modalOverlay) {
-		position: fixed;
-		top: 0;
-		left: 0;
-		background-color: rgb(0 0 0);
-		opacity: 0.3;
+		& :global(.modalOverlay) {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background-color: rgb(0 0 0);
+			opacity: 0.3;
+		}
 	}
 </style>
