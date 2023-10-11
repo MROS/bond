@@ -12,6 +12,8 @@
 	import { bondModalState } from './bond/store';
 	import ImageModal from './image/modal.svelte';
 	import BondModal from './bond/modal.svelte';
+	import type { Bond } from './bond/types';
+	import BondExtension from './bond/bond_extenstion';
 
 	let element: HTMLDivElement;
 	let editor: Editor;
@@ -27,6 +29,7 @@
 					placeholder: '開始寫作...'
 				}),
 				Heading.configure({ levels: [1, 2, 3] }),
+				BondExtension,
 				Image.configure({ HTMLAttributes: { class: 'tiptapImage' } })
 			],
 			content: '',
@@ -52,8 +55,10 @@
 		};
 	};
 	const addBond = () => {
-		console.log('add bond');
 		$bondModalState.isOpen = true;
+		$bondModalState.setBond = (bond: Bond) => {
+			editor.chain().focus().setBond(bond).run();
+		};
 	};
 </script>
 
@@ -153,5 +158,8 @@
 				outline: none;
 			}
 		}
+	}
+	:global(.bondNode) {
+		border: 1px solid brown;
 	}
 </style>

@@ -1,13 +1,17 @@
 <script lang="ts">
 	import { Dialog, DialogOverlay, DialogTitle } from '@rgossiaux/svelte-headlessui';
-	import { bondModalState, attitudes } from './store';
+	import { bondModalState } from './store';
 	import { localStorage } from '$lib/localStorage';
 	import { trpc } from '$lib/trpc/client';
 	import type { RouterOutput } from '$lib/trpc/routers';
+	import type { Attitude, Paragraph } from './types';
+	import { attitudes } from './types';
+
 	let { recentReadArticles } = localStorage;
 	type Article = RouterOutput['article']['get'];
 	let selectedArticle: Article | null = null;
-	let selectedParagraphs: string[] = [];
+	let selectedParagraphs: Paragraph[] = [];
+	let attitude: Attitude = '中立';
 </script>
 
 <Dialog
@@ -39,7 +43,7 @@
 					{#each selectedArticle.paragraphs as paragraph}
 						<label>
 							<div>
-								<input type="checkbox" value={paragraph.id} bind:group={selectedParagraphs} />
+								<input type="checkbox" value={paragraph} bind:group={selectedParagraphs} />
 								{paragraph.text}
 							</div>
 						</label>
@@ -47,7 +51,7 @@
 				</div>
 				<div>
 					態度
-					<select bind:value={$bondModalState.attitude}>
+					<select bind:value={attitude}>
 						{#each attitudes as attitude}
 							<option value={attitude}>
 								{attitude}
@@ -64,7 +68,6 @@
 						<li>
 							<button
 								on:click={() => {
-									$bondModalState.articleId = articleMeta.id;
 									trpc()
 										.article.get.query({ id: articleMeta.id })
 										.then((article) => {
@@ -81,14 +84,17 @@
 
 	<button
 		on:click={() => {
-			if ($bondModalState.confirmCallback) {
-				$bondModalState.confirmCallback();
-				$bondModalState.confirmCallback = null;
+			if ($bondModalState.setBond) {
+				selectedParagraphs.sort((p1, p2) => {
+					return p1.order - p2.order;
+				});
+				$bondModalState.setBond({ paragraphs: selectedParagraphs, attitude });
+			} else {
+				console.error('編輯器未提供 setBond 函式');
 			}
 			$bondModalState.isOpen = false;
-			$bondModalState.articleId = null;
-			$bondModalState.attitude = '中立';
 			selectedArticle = null;
+			selectedParagraphs = [];
 		}}>確定</button
 	>
 	<button on:click={() => ($bondModalState.isOpen = false)}>取消</button>
