@@ -84,11 +84,11 @@
 
 	<button
 		on:click={() => {
-			if ($bondModalState.setBond) {
+			if ($bondModalState.setBondList) {
 				selectedParagraphs.sort((p1, p2) => {
 					return p1.order - p2.order;
 				});
-				$bondModalState.setBond({ paragraphs: selectedParagraphs, attitude });
+				$bondModalState.setBondList({ paragraphs: selectedParagraphs, attitude });
 			} else {
 				console.error('編輯器未提供 setBond 函式');
 			}

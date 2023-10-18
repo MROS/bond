@@ -5,7 +5,7 @@ export type Paragraph = {
 	text: string;
 	order: number;
 };
-export type Bond = {
+export type BondList = {
 	paragraphs: Paragraph[];
 	attitude: Attitude;
 };

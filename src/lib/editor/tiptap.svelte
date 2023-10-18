@@ -12,8 +12,9 @@
 	import { bondModalState } from './bond/store';
 	import ImageModal from './image/modal.svelte';
 	import BondModal from './bond/modal.svelte';
-	import type { Bond } from './bond/types';
+	import type { BondList } from './bond/types';
 	import BondExtension from './bond/bond_extenstion';
+	import BondListExtension from './bond/bond_list_extension';
 
 	let element: HTMLDivElement;
 	let editor: Editor;
@@ -30,6 +31,7 @@
 				}),
 				Heading.configure({ levels: [1, 2, 3] }),
 				BondExtension,
+				BondListExtension,
 				Image.configure({ HTMLAttributes: { class: 'tiptapImage' } })
 			],
 			content: '',
@@ -56,8 +58,8 @@
 	};
 	const addBond = () => {
 		$bondModalState.isOpen = true;
-		$bondModalState.setBond = (bond: Bond) => {
-			editor.chain().focus().setBond(bond).run();
+		$bondModalState.setBondList = (bondList: BondList) => {
+			editor.chain().focus().setBondList(bondList).run();
 		};
 	};
 </script>
@@ -159,7 +161,24 @@
 			}
 		}
 	}
-	:global(.bondNode) {
-		border: 1px solid brown;
+	@keyframes -global-cursorLike {
+		from {
+			border-left: 10px solid black;
+		}
+		to {
+			border-left: 0px solid black;
+		}
+	}
+	:global(.bondListNode) {
+		border-left: 4px solid brown;
+		padding-left: 12px;
+		margin: 18px 4px;
+		& .bond.ProseMirror-selectednode {
+			margin: 4px;
+			animation: cursorLike 1000ms infinite alternate linear(0, 1 50%);
+		}
+	}
+	:global(.ProseMirror-selectednode) {
+		background-color: antiquewhite;
 	}
 </style>

@@ -1,32 +1,31 @@
 import { Node, mergeAttributes } from '@tiptap/core';
 
-import type { Bond } from './types';
-
-declare module '@tiptap/core' {
-	interface Commands<ReturnType> {
-		bond: {
-			setBond: (options: Bond) => ReturnType;
-		};
-	}
-}
-
 const BondExtension = Node.create({
 	name: 'Bond',
 	group: 'block',
-	// atom: true,
+	// content: 'block',
+	atom: true,
 	addOptions() {
 		return {};
 	},
 	addAttributes() {
+		// return {};
 		return {
-			attitude: {
-				default: '中立'
-			},
-			paragraphs: {
-				default: []
+			paragraph: {
+				default: ''
 			}
 		};
 	},
+	// parseHTML() {
+	// 	return [
+	// 		{
+	// 			tag: `div[data-type=${this.name}]`
+	// 		}
+	// 	];
+	// },
+	// renderHTML({ HTMLAttributes }) {
+	// 	return ['div', mergeAttributes(HTMLAttributes, { 'data-type': this.name, class: 'bond' }), 0];
+	// }
 	parseHTML() {
 		return [
 			{
@@ -37,31 +36,57 @@ const BondExtension = Node.create({
 	renderHTML({ HTMLAttributes }) {
 		return ['bond-node', mergeAttributes(HTMLAttributes)];
 	},
-	addCommands() {
-		return {
-			setBond: (options) => {
-				console.log('set Bond outer');
-				return ({ commands }) => {
-					console.log('set Bond inner');
-					return commands.insertContent({
-						type: this.name,
-						attrs: options
-					});
-				};
-			}
-		};
-	},
 	addNodeView() {
 		return ({ node }) => {
 			const dom = document.createElement('div');
-			dom.classList.add('bondNode');
-			for (const paragraph of node.attrs.paragraphs) {
-				const paragraphNode = document.createElement('div');
-				paragraphNode.innerText = paragraph.text;
-				dom.appendChild(paragraphNode);
-			}
+			dom.classList.add('bond');
+			dom.innerText = node.attrs.paragraph;
 
 			return { dom };
+		};
+	},
+	addKeyboardShortcuts() {
+		return {
+			Enter: ({ editor }) => {
+				// 此處定義的 Enter 只應作用在 Bond 上
+				if (!editor.isActive(this.name)) {
+					return false;
+				}
+
+				const head = editor.state.selection.$head;
+				if (head.index(head.depth) == 1) {
+					console.log('first child');
+					editor
+						.chain()
+						.selectParentNode()
+						.insertContentAt(editor.state.selection.from - 1, {
+							type: 'paragraph'
+						})
+						.run();
+					return true;
+				}
+				editor
+					.chain()
+					.splitBlock()
+					.insertContentAt(editor.state.selection.from, {
+						type: 'paragraph'
+					})
+					.run();
+				return true;
+			},
+			Backspace: ({ editor }) => {
+				if (!editor.isActive(this.name)) {
+					return false;
+				}
+				const head = editor.state.selection.$head;
+				if (head.index(head.depth) == 1) {
+					console.log('first child');
+					editor.chain().selectParentNode().joinUp().run();
+					return true;
+				}
+				return true;
+				// return true;
+			}
 		};
 	}
 });
