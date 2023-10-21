@@ -23,6 +23,9 @@ dependencies:
   '@tiptap/extension-heading':
     specifier: ^2.1.11
     version: 2.1.11(@tiptap/core@2.1.11)
+  '@tiptap/extension-history':
+    specifier: ^2.1.12
+    version: 2.1.12(@tiptap/core@2.1.11)(@tiptap/pm@2.1.11)
   '@tiptap/extension-image':
     specifier: ^2.1.11
     version: 2.1.11(@tiptap/core@2.1.11)
@@ -904,6 +907,16 @@ packages:
       '@tiptap/core': ^2.0.0
     dependencies:
       '@tiptap/core': 2.1.11(@tiptap/pm@2.1.11)
+    dev: false
+
+  /@tiptap/extension-history@2.1.12(@tiptap/core@2.1.11)(@tiptap/pm@2.1.11):
+    resolution: {integrity: sha512-6b7UFVkvPjq3LVoCTrYZAczt5sQrQUaoDWAieVClVZoFLfjga2Fwjcfgcie8IjdPt8YO2hG/sar/c07i9vM0Sg==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.1.11(@tiptap/pm@2.1.11)
+      '@tiptap/pm': 2.1.11
     dev: false
 
   /@tiptap/extension-image@2.1.11(@tiptap/core@2.1.11):

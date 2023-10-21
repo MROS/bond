@@ -2,6 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Editor } from '@tiptap/core';
 	import Document from '@tiptap/extension-document';
+	import History from '@tiptap/extension-history';
 	import Paragraph from '@tiptap/extension-paragraph';
 	import Text from '@tiptap/extension-text';
 	import Heading from '@tiptap/extension-heading';
@@ -12,9 +13,8 @@
 	import { bondModalState } from './bond/store';
 	import ImageModal from './image/modal.svelte';
 	import BondModal from './bond/modal.svelte';
-	import type { BondList } from './bond/types';
+	import type { Bond } from './bond/types';
 	import BondExtension from './bond/bond_extenstion';
-	import BondListExtension from './bond/bond_list_extension';
 
 	let element: HTMLDivElement;
 	let editor: Editor;
@@ -24,6 +24,7 @@
 			element: element,
 			extensions: [
 				Document,
+				History,
 				Paragraph,
 				Text,
 				Placeholder.configure({
@@ -31,7 +32,6 @@
 				}),
 				Heading.configure({ levels: [1, 2, 3] }),
 				BondExtension,
-				BondListExtension,
 				Image.configure({ HTMLAttributes: { class: 'tiptapImage' } })
 			],
 			content: '',
@@ -58,8 +58,8 @@
 	};
 	const addBond = () => {
 		$bondModalState.isOpen = true;
-		$bondModalState.setBondList = (bondList: BondList) => {
-			editor.chain().focus().setBondList(bondList).run();
+		$bondModalState.setBond = (bondList: Bond) => {
+			editor.chain().focus().setBond(bondList).run();
 		};
 	};
 </script>
@@ -107,6 +107,14 @@
 			<button class="format" on:click={addBond}>
 				<!-- TODO 改爲碳鍵 logo -->
 				<Icon icon="mdi:format-quote-close" />
+			</button>
+			<button class="format" on:click={() => editor.commands.undo()}>
+				<!-- TODO 改爲碳鍵 logo -->
+				<Icon icon="mdi:undo" />
+			</button>
+			<button class="format" on:click={() => editor.commands.redo()}>
+				<!-- TODO 改爲碳鍵 logo -->
+				<Icon icon="mdi:redo" />
 			</button>
 		</div>
 	{/if}
@@ -169,16 +177,26 @@
 			border-left: 0px solid black;
 		}
 	}
-	:global(.bondListNode) {
-		border-left: 4px solid brown;
-		padding-left: 12px;
-		margin: 18px 4px;
-		& .bond.ProseMirror-selectednode {
-			margin: 4px;
-			animation: cursorLike 1000ms infinite alternate linear(0, 1 50%);
+	:global(.bondNode) {
+		padding: 8px 4px;
+		& .wrapper {
+			border-left: 4px solid brown;
+			padding-left: 12px;
+			& .paragraphNode {
+				border: 1px solid transparent;
+				margin: 4px;
+			}
+			& .paragraphNode:focus {
+				border: 1px solid black;
+				margin: 4px;
+				animation: cursorLike 1000ms infinite alternate linear(0, 1 50%);
+				background-color: antiquewhite;
+			}
 		}
 	}
-	:global(.ProseMirror-selectednode) {
-		background-color: antiquewhite;
+	:global(.ProseMirror-selectednode:not(:has(div:focus))) {
+		& .wrapper {
+			background-color: antiquewhite;
+		}
 	}
 </style>
