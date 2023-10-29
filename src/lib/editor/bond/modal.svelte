@@ -85,10 +85,19 @@
 	<button
 		on:click={() => {
 			if ($bondModalState.setBond) {
+				if (selectedArticle == null) {
+					console.error('未選擇文章');
+					return;
+				}
 				selectedParagraphs.sort((p1, p2) => {
 					return p1.order - p2.order;
 				});
-				$bondModalState.setBond({ paragraphs: selectedParagraphs, attitude });
+				const article = (({ id, title }) => ({ id, title }))(selectedArticle);
+				$bondModalState.setBond({
+					article,
+					paragraphs: selectedParagraphs,
+					attitude
+				});
 			} else {
 				console.error('編輯器未提供 setBond 函式');
 			}

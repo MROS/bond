@@ -5,10 +5,16 @@ export type Paragraph = {
 	text: string;
 	order: number;
 };
+type Article = {
+	id: string;
+	title: string;
+	// author: string;
+};
 export type Bond = {
+	article: Article;
 	paragraphs: Paragraph[];
 	attitude: Attitude;
 
 	// 此為編輯狀態中被聚焦的段落，在唯獨狀態不顯示
-	focusParagraph: number | undefined;
+	focusParagraph?: number;
 };

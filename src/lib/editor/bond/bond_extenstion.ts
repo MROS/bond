@@ -21,6 +21,12 @@ const BondExtension = Node.create({
 			attitude: {
 				default: '中立'
 			},
+			article: {
+				default: {
+					id: '錯誤：不應出現預設 id',
+					title: '錯誤，不應出現預設標題'
+				}
+			},
 			paragraphs: {
 				default: []
 			},
@@ -43,7 +49,6 @@ const BondExtension = Node.create({
 		return {
 			setBond: (options) => {
 				return ({ commands }) => {
-					console.log(options);
 					return commands.insertContent({
 						type: this.name,
 						attrs: options
@@ -60,15 +65,16 @@ const BondExtension = Node.create({
 			// 當點擊到 margin 時， prosemirror 因不明原因會選擇後一個節點
 			const dom = document.createElement('div');
 			dom.classList.add('bondNode');
+
+			if (typeof getPos == 'boolean') {
+				dom.innerText = '內部錯誤，本節點不存在文件中';
+				return dom;
+			}
+
 			const wrapper = document.createElement('div');
 			wrapper.classList.add('wrapper');
 
 			const attrs = node.attrs as Bond;
-
-			if (typeof getPos == 'boolean') {
-				wrapper.innerText = '內部錯誤，本節點不存在文件中';
-				return wrapper;
-			}
 
 			const paragraphNodes: Array<HTMLDivElement> = [];
 			for (const [index, paragraph] of attrs.paragraphs.entries()) {
@@ -117,6 +123,7 @@ const BondExtension = Node.create({
 										attrs: {
 											attitude: attrs.attitude,
 											paragraphs: attrs.paragraphs.slice(0, index),
+											article: attrs.article,
 											focusParagraph: undefined
 										}
 									})
@@ -147,8 +154,45 @@ const BondExtension = Node.create({
 					console.log('not active');
 					return false;
 				}
-				console.log('倒退');
-				return true;
+				const currentPosition = editor.state.selection.$anchor;
+				const node = currentPosition.nodeAfter;
+				const lastNode = currentPosition.nodeBefore;
+
+				if (node == null || lastNode == null) {
+					return false;
+				}
+
+				const nodeAttrs = node.attrs as Bond;
+				const lastNodeAttrs = lastNode.attrs as Bond;
+
+				// 檢查前一個鍵結與當前鍵結是否
+				// 1. 引用同一篇文章
+				// 2. 前一個鍵結的最後一段緊接當前鍵結的第一段
+				// 兩者都符合，那就將兩鍵結合二爲一
+				if (
+					lastNode.type.name == this.name &&
+					lastNodeAttrs.article.id == nodeAttrs.article.id &&
+					lastNodeAttrs.paragraphs.slice(-1)[0].order + 1 == nodeAttrs.paragraphs[0].order
+				) {
+					const { view } = editor;
+					view.dispatch(
+						view.state.tr
+							.setNodeAttribute(currentPosition.pos, 'paragraphs', [
+								...lastNodeAttrs.paragraphs,
+								...nodeAttrs.paragraphs
+							])
+							.setNodeAttribute(
+								currentPosition.pos,
+								'focusParagraph',
+								lastNodeAttrs.paragraphs.length
+							)
+							.delete(currentPosition.pos - lastNode.nodeSize, currentPosition.pos)
+					);
+					return true;
+				}
+
+				// 若無法連接前後鍵結，執行預設行爲
+				return false;
 			}
 		};
 	}

@@ -10,13 +10,13 @@ cd infinite-city3
 pnpm i
 
 # 設定資料庫地址，需先安裝／設定 PostgreSQL
-echo "postgres://postgres:mypassword@localhost:5432/city" > .env
+echo "POSTGRES_PRISMA_URL=\"postgres://postgres:mypassword@localhost:5432/city\"" > .env
 
 # 灌入資料庫 schema
-pnpm exec prisma db push
+pnpm exec prisma db push # --force-reset 可洗掉資料
 
 # 灌入預設文章（可選步驟）
-pnpm exec prisma seed
+pnpm exec prisma db seed
 
 # 啓動伺服器
 pnpm dev

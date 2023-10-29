@@ -58,8 +58,8 @@
 	};
 	const addBond = () => {
 		$bondModalState.isOpen = true;
-		$bondModalState.setBond = (bondList: Bond) => {
-			editor.chain().focus().setBond(bondList).run();
+		$bondModalState.setBond = (bond: Bond) => {
+			editor.chain().focus().setBond(bond).run();
 		};
 	};
 </script>
