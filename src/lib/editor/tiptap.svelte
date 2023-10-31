@@ -185,12 +185,27 @@
 			& .paragraphNode {
 				border: 1px solid transparent;
 				margin: 4px;
+				padding: 5px 0px;
+				& .paragraphButtonBar {
+					display: none;
+				}
 			}
 			& .paragraphNode:focus {
 				border: 1px solid black;
 				margin: 4px;
 				animation: cursorLike 1000ms infinite alternate linear(0, 1 50%);
 				background-color: antiquewhite;
+				padding: 5px 0px;
+				position: relative;
+				& .paragraphButtonBar {
+					display: block;
+					position: absolute;
+					right: 0px;
+					bottom: 0px;
+					& button {
+						padding-top: 4px;
+					}
+				}
 			}
 		}
 	}

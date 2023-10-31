@@ -1,3 +1,4 @@
+import 'iconify-icon';
 import { Node, mergeAttributes } from '@tiptap/core';
 
 import type { Bond } from './types';
@@ -8,6 +9,32 @@ declare module '@tiptap/core' {
 			setBond: (options: Bond) => ReturnType;
 		};
 	}
+}
+
+function deleteButton(deleteItSelf: () => void): HTMLButtonElement {
+	const button = document.createElement('button');
+	button.innerHTML = '<iconify-icon icon="mdi:delete"></iconify-icon>';
+	button.onmousedown = deleteItSelf;
+	return button;
+}
+
+function splitButton(split: () => void): HTMLButtonElement {
+	const button = document.createElement('button');
+	button.innerHTML = '<iconify-icon icon="mdi:arrow-expand-down"></iconify-icon>';
+	// 若使用 onclick ，則 paragraphNode 在 onmousedown 就失焦，本按鈕也就已經被隱藏，無法真正被點擊到
+	button.onmousedown = (event) => {
+		split();
+	};
+	return button;
+}
+
+function paragraphButtonBar(buttons: HTMLButtonElement[]) {
+	const bar = document.createElement('div');
+	bar.className = 'paragraphButtonBar';
+
+	bar.append(...buttons);
+
+	return bar;
 }
 
 const BondExtension = Node.create({
@@ -82,9 +109,71 @@ const BondExtension = Node.create({
 				paragraphNode.classList.add('paragraphNode');
 				paragraphNode.tabIndex = 0;
 				if (index == attrs.focusParagraph) {
-					setTimeout(() => paragraphNode.focus(), 0);
+					setTimeout(() => {
+						paragraphNode.focus();
+						editor.commands.setNodeSelection(getPos());
+					}, 0);
 				}
 				paragraphNode.innerText = paragraph.text;
+
+				const splitParagraph = () => {
+					editor
+						.chain()
+						.insertContentAt(getPos(), {
+							type: this.name,
+							attrs: {
+								attitude: attrs.attitude,
+								paragraphs: attrs.paragraphs.slice(0, index),
+								article: attrs.article,
+								focusParagraph: undefined
+							}
+						})
+						.setNodeSelection(getPos() + 1)
+						.run();
+					// 更新本節點，只保留此 index （含）以降的段落
+					view.dispatch(
+						view.state.tr
+							.setNodeAttribute(getPos(), 'paragraphs', attrs.paragraphs.slice(index))
+							.setNodeAttribute(getPos(), 'focusParagraph', 0)
+					);
+				};
+				const deleteParagraph = () => {
+					// 若僅有一段落，刪除整個鍵結
+					// TODO: 研究能否將 view.dispatch 跟 commands.run 放到同一個 transaction
+					const commands = editor.chain();
+					// 先在 getPos() 插入下半段
+					if (index < attrs.paragraphs.length - 1) {
+						commands.insertContentAt(getPos(), {
+							type: this.name,
+							attrs: {
+								attitude: attrs.attitude,
+								paragraphs: attrs.paragraphs.slice(index + 1),
+								article: attrs.article,
+								focusParagraph: undefined
+							}
+						});
+					}
+					// 再在 getPos() 插入上半段
+					if (index > 0) {
+						commands.insertContentAt(getPos(), {
+							type: this.name,
+							attrs: {
+								attitude: attrs.attitude,
+								paragraphs: attrs.paragraphs.slice(0, index),
+								article: attrs.article,
+								focusParagraph: undefined
+							}
+						});
+					}
+					commands.run();
+					view.dispatch(view.state.tr.delete(getPos(), getPos() + 1));
+				};
+
+				const buttons = [deleteButton(deleteParagraph)];
+				if (index > 0) {
+					buttons.push(splitButton(splitParagraph));
+				}
+				paragraphNode.append(paragraphButtonBar(buttons));
 				paragraphNodes.push(paragraphNode);
 
 				// 在滑鼠按下去的瞬間就讓編輯器的選取當前節點
@@ -114,27 +203,8 @@ const BondExtension = Node.create({
 					event.preventDefault();
 					switch (event.key) {
 						case 'Enter': {
-							console.log('enter');
 							if (index > 0) {
-								editor
-									.chain()
-									.insertContentAt(getPos(), {
-										type: this.name,
-										attrs: {
-											attitude: attrs.attitude,
-											paragraphs: attrs.paragraphs.slice(0, index),
-											article: attrs.article,
-											focusParagraph: undefined
-										}
-									})
-									.setNodeSelection(getPos() + 1)
-									.run();
-								// 更新本節點，只保留此 index 以降的段落
-								view.dispatch(
-									view.state.tr
-										.setNodeAttribute(getPos(), 'paragraphs', attrs.paragraphs.slice(index))
-										.setNodeAttribute(getPos(), 'focusParagraph', 0)
-								);
+								splitParagraph();
 								return;
 							}
 						}
@@ -151,7 +221,6 @@ const BondExtension = Node.create({
 		return {
 			Backspace: ({ editor }) => {
 				if (!editor.isActive(this.name)) {
-					console.log('not active');
 					return false;
 				}
 				const currentPosition = editor.state.selection.$anchor;
