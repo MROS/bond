@@ -1,3 +1,4 @@
+import 'iconify-icon';
 import { Node, mergeAttributes } from '@tiptap/core';
 
 import type { Bond } from './types';
@@ -8,6 +9,19 @@ declare module '@tiptap/core' {
 			setBond: (options: Bond) => ReturnType;
 		};
 	}
+}
+
+function paragraphButtonBar() {
+	const bar = document.createElement('div');
+	bar.className = 'paragraphButtonBar';
+	const deleteButton = document.createElement('button');
+	deleteButton.innerHTML = '<iconify-icon icon="mdi:delete"></iconify-icon>';
+	const splitButton = document.createElement('button');
+	splitButton.innerHTML = '<iconify-icon icon="mdi:arrow-expand-down"></iconify-icon>';
+	const buttons = [deleteButton, splitButton];
+	bar.append(...buttons);
+
+	return bar;
 }
 
 const BondExtension = Node.create({
@@ -85,6 +99,8 @@ const BondExtension = Node.create({
 					setTimeout(() => paragraphNode.focus(), 0);
 				}
 				paragraphNode.innerText = paragraph.text;
+
+				paragraphNode.append(paragraphButtonBar());
 				paragraphNodes.push(paragraphNode);
 
 				// 在滑鼠按下去的瞬間就讓編輯器的選取當前節點

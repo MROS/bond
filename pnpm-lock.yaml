@@ -50,6 +50,9 @@ dependencies:
   '@vercel/analytics':
     specifier: ^1.1.0
     version: 1.1.0
+  iconify-icon:
+    specifier: ^1.0.8
+    version: 1.0.8
   model:
     specifier: link:@tiptap/pm/model
     version: link:@tiptap/pm/model
@@ -1940,6 +1943,12 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /iconify-icon@1.0.8:
+    resolution: {integrity: sha512-jvbUKHXf8EnGGArmhlP2IG8VqQLFFyTvTqb9LVL2TKTh7/eCCD1o2HHE9thpbJJb6B8hzhcFb6rOKhvo7reNKA==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: false
 
   /ignore@5.2.4:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}

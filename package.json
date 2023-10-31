@@ -52,6 +52,7 @@
 		"@trpc/client": "^10.38.1",
 		"@trpc/server": "^10.38.1",
 		"@vercel/analytics": "^1.1.0",
+		"iconify-icon": "^1.0.8",
 		"model": "link:@tiptap/pm/model",
 		"sanitize.css": "^13.0.0",
 		"svelte-persisted-store": "^0.7.0",

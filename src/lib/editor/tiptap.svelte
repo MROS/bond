@@ -185,6 +185,12 @@
 			& .paragraphNode {
 				border: 1px solid transparent;
 				margin: 4px;
+				position: relative;
+				& .paragraphButtonBar {
+					position: absolute;
+					right: 20px;
+					bottom: 0px;
+				}
 			}
 			& .paragraphNode:focus {
 				border: 1px solid black;
