@@ -182,6 +182,16 @@
 		& .wrapper {
 			border-left: 4px solid brown;
 			padding-left: 12px;
+			padding-top: 12px;
+			position: relative;
+			background-color: #f8f8f8;
+			& .deleteButton {
+				position: absolute;
+				font-size: 1.5em;
+				top: -0.5em;
+				right: -0.5em;
+				cursor: pointer;
+			}
 			& .paragraphTitle {
 				padding: 8px 4px;
 				display: flex;

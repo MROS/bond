@@ -22,9 +22,7 @@ function splitButton(split: () => void): HTMLButtonElement {
 	const button = document.createElement('button');
 	button.innerHTML = '<iconify-icon icon="mdi:arrow-expand-down"></iconify-icon>';
 	// 若使用 onclick ，則 paragraphNode 在 onmousedown 就失焦，本按鈕也就已經被隱藏，無法真正被點擊到
-	button.onmousedown = (event) => {
-		split();
-	};
+	button.onmousedown = split;
 	return button;
 }
 
@@ -123,6 +121,14 @@ const BondExtension = Node.create({
 			const wrapper = document.createElement('div');
 			wrapper.classList.add('wrapper');
 
+			const deleteBond = document.createElement('div');
+			deleteBond.classList.add('deleteButton');
+			deleteBond.innerHTML = '<iconify-icon icon="mdi:close-circle"></iconify-icon>';
+			deleteBond.onclick = () => {
+				view.dispatch(view.state.tr.delete(getPos(), getPos() + 1));
+			};
+			wrapper.append(deleteBond);
+
 			const attrs = node.attrs as Bond;
 
 			const paragraphNodes: Array<HTMLDivElement> = [];
@@ -139,6 +145,7 @@ const BondExtension = Node.create({
 				paragraphNode.innerText = paragraph.text;
 				const orderNode = document.createElement('span');
 				orderNode.classList.add('paragraphOrder');
+				// TODO: 加入超鏈接，點擊後可以直接跳躍到原文段落
 				orderNode.innerText = `第 ${paragraph.order + 1} 段`;
 				paragraphNode.appendChild(orderNode);
 
@@ -237,6 +244,8 @@ const BondExtension = Node.create({
 					}
 				};
 			}
+			wrapper.append(...paragraphNodes);
+
 			const title = document.createElement('div');
 			title.classList.add('paragraphTitle');
 			title.innerHTML = `——
@@ -248,7 +257,6 @@ const BondExtension = Node.create({
 			`;
 
 			// dom.append(title);
-			wrapper.append(...paragraphNodes);
 			wrapper.append(title);
 			dom.append(wrapper);
 
