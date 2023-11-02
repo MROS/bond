@@ -74,12 +74,34 @@ const BondExtension = Node.create({
 	},
 	addCommands() {
 		return {
-			setBond: (options) => {
+			setBond: (bond: Bond) => {
 				return ({ commands }) => {
-					return commands.insertContent({
+					const content = [];
+					let head = 0;
+					let tail = 0;
+					for (let i = 1; i < bond.paragraphs.length; i++) {
+						if (bond.paragraphs[i].order == bond.paragraphs[head].order + 1) {
+							tail += 1;
+						} else {
+							content.push({
+								type: this.name,
+								attrs: {
+									...bond,
+									paragraphs: bond.paragraphs.slice(head, i)
+								}
+							});
+							head = i;
+							tail = i;
+						}
+					}
+					content.push({
 						type: this.name,
-						attrs: options
+						attrs: {
+							...bond,
+							paragraphs: bond.paragraphs.slice(head, tail + 1)
+						}
 					});
+					return commands.insertContent(content);
 				};
 			}
 		};
@@ -115,6 +137,10 @@ const BondExtension = Node.create({
 					}, 0);
 				}
 				paragraphNode.innerText = paragraph.text;
+				const orderNode = document.createElement('span');
+				orderNode.classList.add('paragraphOrder');
+				orderNode.innerText = `第 ${paragraph.order + 1} 段`;
+				paragraphNode.appendChild(orderNode);
 
 				const splitParagraph = () => {
 					editor
@@ -211,7 +237,19 @@ const BondExtension = Node.create({
 					}
 				};
 			}
+			const title = document.createElement('div');
+			title.classList.add('paragraphTitle');
+			title.innerHTML = `——
+			<span class="articleName">
+				<a href="/article/${attrs.article.id}">
+					${attrs.article.title}
+				</a>
+			</span>
+			`;
+
+			// dom.append(title);
 			wrapper.append(...paragraphNodes);
+			wrapper.append(title);
 			dom.append(wrapper);
 
 			return { dom };

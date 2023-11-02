@@ -182,13 +182,30 @@
 		& .wrapper {
 			border-left: 4px solid brown;
 			padding-left: 12px;
+			& .paragraphTitle {
+				padding: 8px 4px;
+				display: flex;
+				justify-content: flex-end;
+				& .articleName {
+					margin-left: 5px;
+					text-decoration: wavy underline;
+					text-decoration-skip-ink: none;
+					text-underline-offset: 2px;
+					& a {
+						text-decoration: none;
+					}
+				}
+			}
 			& .paragraphNode {
 				border: 1px solid transparent;
-				margin: 4px;
-				padding: 5px 0px;
+				padding: 8px 4px;
 				& .paragraphButtonBar {
 					display: none;
 				}
+			}
+			& .paragraphOrder {
+				font-size: 0.7em;
+				color: blue;
 			}
 			& .paragraphNode:focus {
 				border: 1px solid black;
