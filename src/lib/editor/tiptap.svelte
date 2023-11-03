@@ -179,6 +179,9 @@
 	}
 	:global(.bondNode) {
 		padding: 8px 4px;
+		& .wrapper:focus {
+			color: aqua;
+		}
 		& .wrapper {
 			border-left: 4px solid brown;
 			padding-left: 12px;

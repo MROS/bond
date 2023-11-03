@@ -2,6 +2,7 @@ import 'iconify-icon';
 import { Node, mergeAttributes } from '@tiptap/core';
 
 import type { Bond } from './types';
+import { Platform, getPlatform } from '$lib/utils/platform';
 
 declare module '@tiptap/core' {
 	interface Commands<ReturnType> {
@@ -74,12 +75,13 @@ const BondExtension = Node.create({
 		return {
 			setBond: (bond: Bond) => {
 				return ({ commands }) => {
+					// 拆解不連續的段落
 					const content = [];
 					let head = 0;
 					let tail = 0;
 					for (let i = 1; i < bond.paragraphs.length; i++) {
-						if (bond.paragraphs[i].order == bond.paragraphs[head].order + 1) {
-							tail += 1;
+						if (bond.paragraphs[i].order == bond.paragraphs[tail].order + 1) {
+							tail = i;
 						} else {
 							content.push({
 								type: this.name,
@@ -256,7 +258,39 @@ const BondExtension = Node.create({
 			</span>
 			`;
 
-			// dom.append(title);
+			// 當點擊 Android 虛擬鍵盤上 Enter 時， Chrome 的 event.key 並不會直接返回
+			//  'Entern' ，而是一個 unidentified 碼然後纔是 'Enter' ，這可能是 Tiptap
+			// 無法在 addKeyboardShortcuts 正確捕捉到 'Enter' 的原因。
+			// https://stackoverflow.com/questions/36753548/keycode-on-android-is-always-229
+			// 需要一個醜陋的暫時解法
+			if (getPlatform() == Platform.Android) {
+				const hiddenInput = document.createElement('textarea');
+				hiddenInput.style.width = '0';
+				hiddenInput.style.height = '0';
+				hiddenInput.style.opacity = '0';
+				hiddenInput.onkeydown = (event) => {
+					// console.log(event.key);
+					if (event.key == 'Enter') {
+						editor.chain().createParagraphNear().focus().run();
+					}
+				};
+				setTimeout(() => {
+					hiddenInput.focus();
+				}, 0);
+				wrapper.append(hiddenInput);
+
+				wrapper.onmousedown = () => {
+					editor.commands.setNodeSelection(getPos());
+				};
+				wrapper.onclick = (event) => {
+					event.stopPropagation();
+					hiddenInput.focus();
+				};
+				wrapper.onmouseup = (event) => {
+					event.stopPropagation();
+					hiddenInput.focus();
+				};
+			}
 			wrapper.append(title);
 			dom.append(wrapper);
 
