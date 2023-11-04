@@ -14,24 +14,24 @@ const zodHeading = z.object({
 	content: z.array(zodText).optional()
 });
 
-type Heading = z.infer<typeof zodHeading>;
+export type Heading = z.infer<typeof zodHeading>;
 
 const zodParagraph = z.object({
 	type: z.literal('paragraph'),
 	content: z.array(zodText).optional()
 });
 
-type Paragraph = z.infer<typeof zodParagraph>;
+export type Paragraph = z.infer<typeof zodParagraph>;
 
 const zodBond = z.object({
 	type: z.literal('Bond'),
 	attrs: zodBondAttribute
 });
 
-type Bond = z.infer<typeof zodBond>;
+export type Bond = z.infer<typeof zodBond>;
 
-const zodNode = z.discriminatedUnion('type', [zodHeading, zodParagraph, zodBond]);
-type Node = z.infer<typeof zodNode>;
+export const zodNode = z.discriminatedUnion('type', [zodHeading, zodParagraph, zodBond]);
+export type Node = z.infer<typeof zodNode>;
 
 export const zodDoc = z.object({
 	type: z.literal('doc'),

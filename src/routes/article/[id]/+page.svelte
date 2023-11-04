@@ -10,7 +10,7 @@
 		<nav>
 			<a href="/article">回文章列表</a>
 		</nav>
-		<Article data={data.article} />
+		<Article article={data.article} />
 	</div>
 	<Replies />
 </div>
