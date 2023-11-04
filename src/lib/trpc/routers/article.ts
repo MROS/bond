@@ -1,6 +1,7 @@
 import db from '$lib/db';
 import { z } from 'zod';
 import { router, publicProcedure } from '..';
+import { zodDoc } from '$lib/editor/types';
 
 export const articleRouter = router({
 	get: publicProcedure.input(z.object({ id: z.string() })).query(async (opts) => {
@@ -8,5 +9,31 @@ export const articleRouter = router({
 			where: { id: opts.input.id },
 			include: { paragraphs: { orderBy: { order: 'asc' } } }
 		});
-	})
+	}),
+	create: publicProcedure
+		.input(
+			z.object({
+				doc: zodDoc,
+				title: z.string()
+			})
+		)
+		.mutation(async (opts) => {
+			const { doc, title } = opts.input;
+			const paragraphs = doc.content.map((node, index) => {
+				return {
+					text: JSON.stringify(node),
+					order: index
+				};
+			});
+			return db.article.create({
+				data: {
+					// TODO: 資料庫更名 doc
+					content: JSON.stringify(doc),
+					title,
+					paragraphs: {
+						create: paragraphs
+					}
+				}
+			});
+		})
 });

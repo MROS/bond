@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store';
-import type { Bond } from './types';
+import type { BondAttribute } from './types';
 
 type BondModalState = {
 	isOpen: boolean;
-	setBond: null | ((bond: Bond) => void);
+	setBond: null | ((bond: BondAttribute) => void);
 };
 
 export const bondModalState = writable<BondModalState>({

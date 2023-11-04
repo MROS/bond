@@ -9,15 +9,19 @@
 	import Image from '@tiptap/extension-image';
 	import Placeholder from '@tiptap/extension-placeholder';
 	import Icon from '@iconify/svelte';
-	import { imageModalIsOpen, imageUrl, confirmCallback } from './image/store';
-	import { bondModalState } from './bond/store';
-	import ImageModal from './image/modal.svelte';
-	import BondModal from './bond/modal.svelte';
-	import type { Bond } from './bond/types';
-	import BondExtension from './bond/bond_extenstion';
+	import { imageModalIsOpen, imageUrl, confirmCallback } from './extensions/image/store';
+	import { bondModalState } from './extensions/bond/store';
+	import ImageModal from './extensions/image/modal.svelte';
+	import BondModal from './extensions/bond/modal.svelte';
+	import type { BondAttribute } from './extensions/bond/types';
+	import BondExtension from './extensions/bond/bond_extenstion';
+	import { trpc } from '$lib/trpc/client';
+	import { zodDoc } from './types';
 
 	let element: HTMLDivElement;
 	let editor: Editor;
+
+	let titleValue = '';
 
 	onMount(() => {
 		editor = new Editor({
@@ -58,7 +62,7 @@
 	};
 	const addBond = () => {
 		$bondModalState.isOpen = true;
-		$bondModalState.setBond = (bond: Bond) => {
+		$bondModalState.setBond = (bond: BondAttribute) => {
 			editor.chain().focus().setBond(bond).run();
 		};
 	};
@@ -67,7 +71,7 @@
 <div class="articlePublisher">
 	<div>
 		<form class="pure-form">
-			<input class="title" placeholder="標題" />
+			<input class="title" placeholder="標題" bind:value={titleValue} />
 		</form>
 	</div>
 
@@ -123,7 +127,17 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div class="editor" bind:this={element} on:click={() => editor.chain().focus()} />
 	<div>
-		<button class="pure-button pure-button-primary">發佈文章</button>
+		<button
+			class="pure-button pure-button-primary"
+			on:click={() => {
+				trpc().article.create.mutate({
+					doc: zodDoc.parse(editor.getJSON()),
+					title: titleValue
+				});
+			}}
+		>
+			發佈文章
+		</button>
 	</div>
 </div>
 <ImageModal />

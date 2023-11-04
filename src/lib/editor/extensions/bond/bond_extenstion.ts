@@ -1,13 +1,13 @@
 import 'iconify-icon';
 import { Node, mergeAttributes } from '@tiptap/core';
 
-import type { Bond } from './types';
+import type { BondAttribute } from './types';
 import { Platform, getPlatform } from '$lib/utils/platform';
 
 declare module '@tiptap/core' {
 	interface Commands<ReturnType> {
 		bond: {
-			setBond: (options: Bond) => ReturnType;
+			setBond: (options: BondAttribute) => ReturnType;
 		};
 	}
 }
@@ -73,7 +73,7 @@ const BondExtension = Node.create({
 	},
 	addCommands() {
 		return {
-			setBond: (bond: Bond) => {
+			setBond: (bond: BondAttribute) => {
 				return ({ commands }) => {
 					// 拆解不連續的段落
 					const content = [];
@@ -131,7 +131,7 @@ const BondExtension = Node.create({
 			};
 			wrapper.append(deleteBond);
 
-			const attrs = node.attrs as Bond;
+			const attrs = node.attrs as BondAttribute;
 
 			const paragraphNodes: Array<HTMLDivElement> = [];
 			for (const [index, paragraph] of attrs.paragraphs.entries()) {
@@ -311,8 +311,8 @@ const BondExtension = Node.create({
 					return false;
 				}
 
-				const nodeAttrs = node.attrs as Bond;
-				const lastNodeAttrs = lastNode.attrs as Bond;
+				const nodeAttrs = node.attrs as BondAttribute;
+				const lastNodeAttrs = lastNode.attrs as BondAttribute;
 
 				// 檢查前一個鍵結與當前鍵結是否
 				// 1. 引用同一篇文章
