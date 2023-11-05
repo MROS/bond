@@ -9,6 +9,24 @@
 
 	type Article = PageData['article'];
 	export let article: Article;
+	let nodes: NodeType.Node[] = [];
+	let parseError: null | string = null;
+
+	$: {
+		try {
+			nodes =
+				article?.paragraphs.map((paragraph) => {
+					const json = JSON.parse(paragraph.text);
+					return NodeType.zodNode.parse(json);
+				}) ?? [];
+			parseError = null;
+		} catch (e) {
+			nodes = [];
+			console.error(e);
+			parseError = (e as Error).message;
+		}
+	}
+
 	if (article) {
 		localStorage.addRecentReadArticle(article);
 	}
@@ -21,13 +39,17 @@
 <div class="article">
 	{#if article}
 		<h1>{article.title}</h1>
-		{#each article.paragraphs as paragrapph}
-			<Node node={NodeType.zodNode.parse(JSON.parse(paragrapph.text))} />
-			<!-- <Paragraph
+		{#if parseError}
+			格式錯誤：{parseError}
+		{:else}
+			{#each nodes as node}
+				<Node {node} />
+				<!-- <Paragraph
 				text={paragrapph.text}
 				id={paragrapph.id} -->
-			<!-- /> -->
-		{/each}
+				<!-- /> -->
+			{/each}
+		{/if}
 	{:else}
 		<h1>查無此文</h1>
 	{/if}
