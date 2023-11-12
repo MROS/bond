@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Paragraph } from '../types';
 	export let paragraph: Paragraph;
+	const text = paragraph.content?.map((text) => text.text) ?? '';
 </script>
 
-<p>{paragraph.content?.map((text) => text.text)}</p>
+<!-- paragraph.content 可能爲空 -->
+<p>{text}</p>

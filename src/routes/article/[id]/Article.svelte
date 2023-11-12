@@ -9,6 +9,7 @@
 
 	type Article = PageData['article'];
 	export let article: Article;
+	console.log(article);
 	let nodes: NodeType.Node[] = [];
 	let parseError: null | string = null;
 
