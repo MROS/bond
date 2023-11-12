@@ -1,0 +1,67 @@
+.bondNode {
+    padding: 8px 4px;
+    & .wrapper:focus {
+        color: aqua;
+    }
+    & .wrapper {
+        border-left: 4px solid brown;
+        padding-left: 12px;
+        padding-top: 12px;
+        position: relative;
+        background-color: #f8f8f8;
+        & .deleteButton {
+            position: absolute;
+            font-size: 1.5em;
+            top: -0.5em;
+            right: -0.5em;
+            cursor: pointer;
+        }
+        & .paragraphTitle {
+            padding: 8px 4px;
+            display: flex;
+            justify-content: flex-end;
+            & .articleName {
+                margin-left: 5px;
+                text-decoration: wavy underline;
+                text-decoration-skip-ink: none;
+                text-underline-offset: 2px;
+                & a {
+                    text-decoration: none;
+                }
+            }
+        }
+        & .paragraphNode {
+            border: 1px solid transparent;
+            padding: 8px 4px;
+            & .paragraphButtonBar {
+                display: none;
+            }
+        }
+        & .paragraphOrder {
+            font-size: 0.7em;
+            color: blue;
+        }
+        & .paragraphNode:focus {
+            border: 1px solid black;
+            margin: 4px;
+            animation: cursorLike 1000ms infinite alternate linear(0, 1 50%);
+            background-color: antiquewhite;
+            padding: 5px 0px;
+            position: relative;
+            & .paragraphButtonBar {
+                display: block;
+                position: absolute;
+                right: 0px;
+                bottom: 0px;
+                & button {
+                    padding-top: 4px;
+                }
+            }
+        }
+    }
+}
+.ProseMirror-selectednode:not(:has(div:focus)) {
+    & .wrapper {
+        background-color: antiquewhite;
+    }
+}

@@ -18,5 +18,13 @@
 <style>
 	.main {
 		display: flex;
+		width: 100%;
+		justify-content: center;
+		& > div {
+			width: 100%;
+			@media (min-width: 600px) {
+				width: 600px;
+			}
+		}
 	}
 </style>

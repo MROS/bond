@@ -39,17 +39,19 @@
 <div class="article">
 	{#if article}
 		<h1>{article.title}</h1>
-		{#if parseError}
-			格式錯誤：{parseError}
-		{:else}
-			{#each nodes as node}
-				<Node {node} />
-				<!-- <Paragraph
+		<div class="content">
+			{#if parseError}
+				格式錯誤：{parseError}
+			{:else}
+				{#each nodes as node}
+					<Node {node} />
+					<!-- <Paragraph
 				text={paragrapph.text}
 				id={paragrapph.id} -->
-				<!-- /> -->
-			{/each}
-		{/if}
+					<!-- /> -->
+				{/each}
+			{/if}
+		</div>
 	{:else}
 		<h1>查無此文</h1>
 	{/if}
@@ -57,6 +59,8 @@
 
 <style>
 	.article {
-		max-width: 680px;
+		& .content {
+			font-size: 18px;
+		}
 	}
 </style>
