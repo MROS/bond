@@ -9,7 +9,7 @@ const zodText = z.object({
 const zodHeading = z.object({
 	type: z.literal('heading'),
 	attrs: z.object({
-		level: z.union([z.literal(1), z.literal(2), z.literal(3)])
+		level: z.union([z.literal(2), z.literal(3), z.literal(4)])
 	}),
 	content: z.array(zodText).optional()
 });

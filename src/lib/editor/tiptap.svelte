@@ -34,7 +34,7 @@
 				Placeholder.configure({
 					placeholder: '開始寫作...'
 				}),
-				Heading.configure({ levels: [1, 2, 3] }),
+				Heading.configure({ levels: [2, 3, 4] }),
 				BondExtension,
 				Image.configure({ HTMLAttributes: { class: 'tiptapImage' } })
 			],
@@ -79,22 +79,22 @@
 		<div>
 			<button
 				class="format"
-				on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-				class:active={editor.isActive('heading', { level: 1 })}
+				on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+				class:active={editor.isActive('heading', { level: 2 })}
 			>
 				<Icon icon="mdi:format-header-1" />
 			</button>
 			<button
 				class="format"
-				on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-				class:active={editor.isActive('heading', { level: 2 })}
+				on:click={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+				class:active={editor.isActive('heading', { level: 3 })}
 			>
 				<Icon icon="mdi:format-header-2" />
 			</button>
 			<button
 				class="format"
-				on:click={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-				class:active={editor.isActive('heading', { level: 3 })}
+				on:click={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+				class:active={editor.isActive('heading', { level: 4 })}
 			>
 				<Icon icon="mdi:format-header-3" />
 			</button>
