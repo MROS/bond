@@ -7,7 +7,7 @@ export const articleRouter = router({
 	get: publicProcedure.input(z.object({ id: z.string() })).query(async (opts) => {
 		return db.article.findFirst({
 			where: { id: opts.input.id },
-			include: { paragraphs: { orderBy: { order: 'asc' } } }
+			include: { nodes: { orderBy: { order: 'asc' } } }
 		});
 	}),
 	create: publicProcedure
@@ -19,7 +19,7 @@ export const articleRouter = router({
 		)
 		.mutation(async (opts) => {
 			const { doc, title } = opts.input;
-			const paragraphs = doc.content.map((node, index) => {
+			const nodes = doc.content.map((node, index) => {
 				return {
 					text: JSON.stringify(node),
 					order: index
@@ -30,8 +30,8 @@ export const articleRouter = router({
 					// TODO: 資料庫更名 doc
 					content: JSON.stringify(doc),
 					title,
-					paragraphs: {
-						create: paragraphs
+					nodes: {
+						create: nodes
 					}
 				}
 			});

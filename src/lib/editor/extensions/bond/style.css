@@ -1,4 +1,4 @@
-.bondNode {
+.bond {
     padding: 8px 4px;
     & .wrapper:focus {
         color: aqua;
@@ -16,39 +16,42 @@
             right: -0.5em;
             cursor: pointer;
         }
-        & .paragraphTitle {
+        & .articleMeta {
             padding: 8px 4px;
             display: flex;
             justify-content: flex-end;
             & .articleName {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
                 margin-left: 5px;
-                text-decoration: wavy underline;
+                text-decoration: wavy gray underline;
                 text-decoration-skip-ink: none;
-                text-underline-offset: 2px;
+                text-underline-offset: 0px;
                 & a {
                     text-decoration: none;
                 }
             }
         }
-        & .paragraphNode {
+        & .quotedNodeDiv {
             border: 1px solid transparent;
             padding: 8px 4px;
-            & .paragraphButtonBar {
+            & .quotedNodeButtonBar {
                 display: none;
             }
         }
-        & .paragraphOrder {
+        & .quotedNodeOrder {
             font-size: 0.7em;
             color: blue;
         }
-        & .paragraphNode:focus {
+        & .quotedNodeDiv:focus {
             border: 1px solid black;
             margin: 4px;
             animation: cursorLike 1000ms infinite alternate linear(0, 1 50%);
             background-color: antiquewhite;
             padding: 5px 0px;
             position: relative;
-            & .paragraphButtonBar {
+            & .quotedNodeButtonBar {
                 display: block;
                 position: absolute;
                 right: 0px;

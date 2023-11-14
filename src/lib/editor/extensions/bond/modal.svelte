@@ -4,13 +4,13 @@
 	import { localStorage } from '$lib/localStorage';
 	import { trpc } from '$lib/trpc/client';
 	import type { RouterOutput } from '$lib/trpc/routers';
-	import type { Attitude, Paragraph } from './types';
+	import type { Attitude, QuotedNode } from './types';
 	import { attitudes } from './types';
 
 	let { recentReadArticles } = localStorage;
 	type Article = RouterOutput['article']['get'];
 	let selectedArticle: Article | null = null;
-	let selectedParagraphs: Paragraph[] = [];
+	let selectedNodes: QuotedNode[] = [];
 	let attitude: Attitude = '中立';
 </script>
 
@@ -39,12 +39,12 @@
 						selectedArticle = null;
 					}}>選擇其他文章</button
 				>
-				<div class="paragraphs">
-					{#each selectedArticle.paragraphs as paragraph}
+				<div class="nodes">
+					{#each selectedArticle.nodes as node}
 						<label>
 							<div>
-								<input type="checkbox" value={paragraph} bind:group={selectedParagraphs} />
-								{paragraph.text}
+								<input type="checkbox" value={node} bind:group={selectedNodes} />
+								{node.text}
 							</div>
 						</label>
 					{/each}
@@ -89,13 +89,13 @@
 					console.error('未選擇文章');
 					return;
 				}
-				selectedParagraphs.sort((p1, p2) => {
+				selectedNodes.sort((p1, p2) => {
 					return p1.order - p2.order;
 				});
 				const article = (({ id, title }) => ({ id, title }))(selectedArticle);
 				$bondModalState.setBond({
 					article,
-					paragraphs: selectedParagraphs,
+					quotedNodes: selectedNodes,
 					attitude
 				});
 			} else {
@@ -103,7 +103,7 @@
 			}
 			$bondModalState.isOpen = false;
 			selectedArticle = null;
-			selectedParagraphs = [];
+			selectedNodes = [];
 		}}>確定</button
 	>
 	<button on:click={() => ($bondModalState.isOpen = false)}>取消</button>
@@ -131,7 +131,7 @@
 			background-color: rgb(0 0 0);
 			opacity: 0.3;
 		}
-		& .paragraphs {
+		& .nodes {
 			margin: 10px;
 			max-height: 400px;
 			overflow-y: scroll;

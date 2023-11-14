@@ -5,13 +5,13 @@ export const attitudes = ['中立', '反對', '贊同'] as const;
 const zodAttitude = z.enum(attitudes);
 export type Attitude = z.infer<typeof zodAttitude>;
 
-const zodParagraph = z.object({
+const zodQuotedNode = z.object({
 	id: z.string(),
 	text: z.string(),
 	order: z.number()
 });
 
-export type Paragraph = z.infer<typeof zodParagraph>;
+export type QuotedNode = z.infer<typeof zodQuotedNode>;
 
 const zodArticle = z.object({
 	id: z.string(),
@@ -20,11 +20,11 @@ const zodArticle = z.object({
 
 export const zodBondAttribute = z.object({
 	article: zodArticle,
-	paragraphs: z.array(zodParagraph),
+	quotedNodes: z.array(zodQuotedNode),
 	attitude: zodAttitude,
 
 	// 此為編輯狀態中被聚焦的段落，在唯獨狀態無任何作用
-	focusParagraph: z.number().optional()
+	focusQuotedNode: z.number().optional()
 });
 
 export type BondAttribute = z.infer<typeof zodBondAttribute>;

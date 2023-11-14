@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import type { PageData } from './$types';
-	import Paragraph from './Paragraph.svelte';
 	import Node from '$lib/editor/render/Node.svelte';
 	import * as NodeType from '$lib/editor/types';
-	import { replyingParagraphId } from './store';
+	import { replyingNodeId } from './store';
 	import { localStorage } from '$lib/localStorage';
 
 	type Article = PageData['article'];
@@ -16,8 +15,8 @@
 	$: {
 		try {
 			nodes =
-				article?.paragraphs.map((paragraph) => {
-					const json = JSON.parse(paragraph.text);
+				article?.nodes.map((node) => {
+					const json = JSON.parse(node.text);
 					return NodeType.zodNode.parse(json);
 				}) ?? [];
 			parseError = null;
@@ -33,7 +32,7 @@
 	}
 
 	onDestroy(() => {
-		replyingParagraphId.set(undefined);
+		replyingNodeId.set(undefined);
 	});
 </script>
 
@@ -45,11 +44,8 @@
 				格式錯誤：{parseError}
 			{:else}
 				{#each nodes as node}
+					<!-- TODO: 改寫 ./Node.svelte ， 補回留言功能 -->
 					<Node {node} />
-					<!-- <Paragraph
-				text={paragrapph.text}
-				id={paragrapph.id} -->
-					<!-- /> -->
 				{/each}
 			{/if}
 		</div>

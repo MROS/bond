@@ -1,3 +1,4 @@
+// TODO: 適應新資料庫綱要
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 

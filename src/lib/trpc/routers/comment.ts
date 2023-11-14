@@ -3,23 +3,23 @@ import { z } from 'zod';
 import { router, publicProcedure } from '..';
 
 export const commentRouter = router({
-	get: publicProcedure.input(z.object({ paragraphId: z.string() })).query(async (opts) => {
+	get: publicProcedure.input(z.object({ nodeId: z.string() })).query(async (opts) => {
 		return db.comment.findMany({
 			select: { content: true },
-			where: { paragraphId: opts.input.paragraphId }
+			where: { nodeId: opts.input.nodeId }
 		});
 	}),
 	create: publicProcedure
 		.input(
 			z.object({
-				paragraphId: z.string(),
+				nodeId: z.string(),
 				content: z.string()
 			})
 		)
 		.mutation(async (opts) => {
 			return db.comment.create({
 				data: {
-					paragraphId: opts.input.paragraphId,
+					nodeId: opts.input.nodeId,
 					content: opts.input.content
 				}
 			});

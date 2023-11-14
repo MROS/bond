@@ -8,24 +8,25 @@ datasource db {
 }
 
 model Article {
-  id         String      @id @default(nanoid())
-  title      String
-  content    String
-  paragraphs Paragraph[]
+  id      String @id @default(nanoid())
+  title   String
+  content String
+  nodes   Node[]
 }
 
-model Paragraph {
+// 一篇文章由多個節點組成，詳見 $lib/editor/types/ts 的定義
+model Node {
   id        String    @id @default(nanoid())
   text      String
   order     Int
-  articleId String
   comment   Comment[]
+  articleId String
   article   Article   @relation(fields: [articleId], references: [id])
 }
 
 model Comment {
-  id          Int       @id @default(autoincrement())
-  content     String
-  paragraphId String
-  paragraph   Paragraph @relation(fields: [paragraphId], references: [id])
+  id      Int    @id @default(autoincrement())
+  content String
+  nodeId  String
+  node    Node   @relation(fields: [nodeId], references: [id])
 }

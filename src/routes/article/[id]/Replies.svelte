@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import { replyingParagraphId } from './store';
+	import { replyingNodeId } from './store';
 	import { trpc } from '$lib/trpc/client';
 
 	let commentValue = '';
 	let textareaElement: HTMLTextAreaElement;
 	async function createComment(content: string) {
-		if ($replyingParagraphId == undefined) {
+		if ($replyingNodeId == undefined) {
 			console.error('未指定留言對應的段落 ID');
 			return;
 		}
 		return trpc()
-			.comment.create.mutate({ content, paragraphId: $replyingParagraphId })
+			.comment.create.mutate({ content, nodeId: $replyingNodeId })
 			.then((comment) => {
 				console.log(`comment created: ${JSON.stringify(comment)}`);
 			});
@@ -25,23 +25,23 @@
 	let comments: null | Comment[] = null;
 
 	function refreshComments() {
-		if (!$replyingParagraphId) {
+		if (!$replyingNodeId) {
 			return;
 		}
 		trpc()
-			.comment.get.query({ paragraphId: $replyingParagraphId })
+			.comment.get.query({ nodeId: $replyingNodeId })
 			.then((refreshedCmments) => {
 				comments = refreshedCmments;
 			});
 	}
 
-	// 當 replying_paragraph_id 變化時，改變 comments 內容
-	replyingParagraphId.subscribe(() => {
+	// 當 replyingNodeId 變化時，改變 comments 內容
+	replyingNodeId.subscribe(() => {
 		refreshComments();
 	});
 </script>
 
-{#if $replyingParagraphId != undefined}
+{#if $replyingNodeId != undefined}
 	<div class="replies" transition:slide={{ axis: 'x' }}>
 		<div class="inner">
 			{#if comments == null}
@@ -68,7 +68,7 @@
 					class="comment"
 				/>
 			</label>
-			<input type="hidden" name="paragraph_id" value={$replyingParagraphId} />
+			<input type="hidden" name="node_id" value={$replyingNodeId} />
 			<button
 				on:click={() =>
 					createComment(commentValue).then(() => {
