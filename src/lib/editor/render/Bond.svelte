@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Bond } from '../types';
+	import RenderNode from './Node.svelte';
 	export let bond: Bond;
 </script>
 
@@ -8,7 +9,7 @@
 		{#each bond.attrs.quotedNodes as quotedNode}
 			<!-- TODO: text 的類型應改爲 Node ，渲染需遞迴調用 -->
 			<div class="quotedNodeDiv">
-				{quotedNode.text}
+				<RenderNode node={quotedNode.value} />
 				<span class="quotedNodeOrder">
 					<!-- 軟體慣以 0 爲始，但文章段落通常以 1 爲始 -->
 					第 {quotedNode.order + 1} 段

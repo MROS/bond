@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { BondAttribute } from './types';
+import type { BondAttribute } from '$lib/editor/types';
 
 type BondModalState = {
 	isOpen: boolean;

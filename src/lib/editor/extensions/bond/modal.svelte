@@ -4,13 +4,14 @@
 	import { localStorage } from '$lib/localStorage';
 	import { trpc } from '$lib/trpc/client';
 	import type { RouterOutput } from '$lib/trpc/routers';
-	import type { Attitude, QuotedNode } from './types';
-	import { attitudes } from './types';
+	import { attitudes } from '$lib/editor/types';
+	import type { Attitude, NodeWithMeta } from '$lib/editor/types';
+	import RenderNode from '$lib/editor/render/Node.svelte';
 
 	let { recentReadArticles } = localStorage;
 	type Article = RouterOutput['article']['get'];
 	let selectedArticle: Article | null = null;
-	let selectedNodes: QuotedNode[] = [];
+	let selectedNodes: NodeWithMeta[] = [];
 	let attitude: Attitude = '中立';
 </script>
 
@@ -44,7 +45,7 @@
 						<label>
 							<div>
 								<input type="checkbox" value={node} bind:group={selectedNodes} />
-								{node.text}
+								<RenderNode node={node.value} />
 							</div>
 						</label>
 					{/each}

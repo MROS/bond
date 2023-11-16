@@ -1,30 +1,16 @@
 <script lang="ts">
 	import { onDestroy } from 'svelte';
 	import type { PageData } from './$types';
-	import Node from '$lib/editor/render/Node.svelte';
-	import * as NodeType from '$lib/editor/types';
+	import RenderNode from '$lib/editor/render/Node.svelte';
+	import type * as NodeType from '$lib/editor/types';
 	import { replyingNodeId } from './store';
 	import { localStorage } from '$lib/localStorage';
 
 	type Article = PageData['article'];
 	export let article: Article;
-	console.log(article);
-	let nodes: NodeType.Node[] = [];
-	let parseError: null | string = null;
-
-	$: {
-		try {
-			nodes =
-				article?.nodes.map((node) => {
-					const json = JSON.parse(node.text);
-					return NodeType.zodNode.parse(json);
-				}) ?? [];
-			parseError = null;
-		} catch (e) {
-			nodes = [];
-			console.error(e);
-			parseError = (e as Error).message;
-		}
+	let nodes: NodeType.NodeWithMeta[] = [];
+	if (article) {
+		nodes = article.nodes;
 	}
 
 	if (article) {
@@ -40,14 +26,10 @@
 	{#if article}
 		<h1>{article.title}</h1>
 		<div class="content">
-			{#if parseError}
-				格式錯誤：{parseError}
-			{:else}
-				{#each nodes as node}
-					<!-- TODO: 改寫 ./Node.svelte ， 補回留言功能 -->
-					<Node {node} />
-				{/each}
-			{/if}
+			{#each nodes as node}
+				<!-- TODO: 改寫 ./Node.svelte ， 補回留言功能 -->
+				<RenderNode node={node.value} />
+			{/each}
 		</div>
 	{:else}
 		<h1>查無此文</h1>

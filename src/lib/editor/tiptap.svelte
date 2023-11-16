@@ -13,7 +13,7 @@
 	import { bondModalState } from './extensions/bond/store';
 	import ImageModal from './extensions/image/modal.svelte';
 	import BondModal from './extensions/bond/modal.svelte';
-	import type { BondAttribute } from './extensions/bond/types';
+	import type { BondAttribute } from '$lib/editor/types';
 	import BondExtension from './extensions/bond/bond_extenstion';
 	import { trpc } from '$lib/trpc/client';
 	import { zodDoc } from './types';

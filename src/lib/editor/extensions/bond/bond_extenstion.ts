@@ -1,8 +1,10 @@
 import 'iconify-icon';
 import { Node, mergeAttributes } from '@tiptap/core';
 
-import type { BondAttribute } from './types';
+import type { BondAttribute } from '$lib/editor/types';
 import { Platform, getPlatform } from '$lib/utils/platform';
+
+import RenderNode from '$lib/editor/render/Node.svelte';
 
 declare module '@tiptap/core' {
 	interface Commands<ReturnType> {
@@ -144,7 +146,11 @@ const BondExtension = Node.create({
 						editor.commands.setNodeSelection(getPos());
 					}, 0);
 				}
-				quotedNodeDiv.innerText = quotedNode.text;
+				const renderNode = document.createElement('div');
+				quotedNodeDiv.appendChild(renderNode);
+				// TODO: 解決額外換行
+				new RenderNode({ target: renderNode, props: { node: quotedNode.value } });
+
 				const quotedNodeOrder = document.createElement('span');
 				quotedNodeOrder.classList.add('quotedNodeOrder');
 				// TODO: 加入超鏈接，點擊後可以直接跳躍到原文段落

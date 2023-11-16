@@ -1,14 +1,29 @@
 import db from '$lib/db';
 import { z } from 'zod';
 import { router, publicProcedure } from '..';
-import { zodDoc } from '$lib/editor/types';
+import { zodDoc, zodNode } from '$lib/editor/types';
 
 export const articleRouter = router({
 	get: publicProcedure.input(z.object({ id: z.string() })).query(async (opts) => {
-		return db.article.findFirst({
-			where: { id: opts.input.id },
-			include: { nodes: { orderBy: { order: 'asc' } } }
-		});
+		return db.article
+			.findFirst({
+				where: { id: opts.input.id },
+				include: { nodes: { orderBy: { order: 'asc' } } }
+			})
+			.then((article) => {
+				if (article == null) {
+					return article;
+				}
+				return {
+					...article,
+					nodes: article.nodes.map((node) => {
+						return {
+							...node,
+							value: zodNode.parse(JSON.parse(node.value))
+						};
+					})
+				};
+			});
 	}),
 	create: publicProcedure
 		.input(
@@ -21,7 +36,7 @@ export const articleRouter = router({
 			const { doc, title } = opts.input;
 			const nodes = doc.content.map((node, index) => {
 				return {
-					text: JSON.stringify(node),
+					value: JSON.stringify(node),
 					order: index
 				};
 			});

@@ -17,7 +17,7 @@ model Article {
 // 一篇文章由多個節點組成，詳見 $lib/editor/types/ts 的定義
 model Node {
   id        String    @id @default(nanoid())
-  text      String
+  value     String // 一個 JSON ，能代表 prosemirror 節點
   order     Int
   comment   Comment[]
   articleId String
