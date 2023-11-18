@@ -36,6 +36,9 @@
         & .quotedNodeDiv {
             border: 1px solid transparent;
             padding: 8px 4px;
+            & h2, h3, h4,p {
+                display: inline;
+            }
             & .quotedNodeButtonBar {
                 display: none;
             }
@@ -43,6 +46,7 @@
         & .quotedNodeOrder {
             font-size: 0.7em;
             color: blue;
+            margin-left: 4px;
         }
         & .quotedNodeDiv:focus {
             border: 1px solid black;

@@ -146,10 +146,8 @@ const BondExtension = Node.create({
 						editor.commands.setNodeSelection(getPos());
 					}, 0);
 				}
-				const renderNode = document.createElement('div');
-				quotedNodeDiv.appendChild(renderNode);
 				// TODO: 解決額外換行
-				new RenderNode({ target: renderNode, props: { node: quotedNode.value } });
+				new RenderNode({ target: quotedNodeDiv, props: { node: quotedNode.value } });
 
 				const quotedNodeOrder = document.createElement('span');
 				quotedNodeOrder.classList.add('quotedNodeOrder');

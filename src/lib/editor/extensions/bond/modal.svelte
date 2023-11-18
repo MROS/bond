@@ -43,7 +43,7 @@
 				<div class="nodes">
 					{#each selectedArticle.nodes as node}
 						<label>
-							<div>
+							<div class="node">
 								<input type="checkbox" value={node} bind:group={selectedNodes} />
 								<RenderNode node={node.value} />
 							</div>
@@ -140,6 +140,12 @@
 			https://stackoverflow.com/questions/73936048/how-do-you-enable-has-selector-on-firefox */
 			& div:has(input:checked) {
 				background-color: antiquewhite;
+			}
+			& .node {
+				display: flex;
+				& p {
+					margin: 4px;
+				}
 			}
 		}
 	}
