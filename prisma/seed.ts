@@ -190,24 +190,34 @@ A: 不會，此身份驗證僅在時事板、COVID-19 及防疫生活板實施�
 
 async function main() {
 	for (const article of articles) {
+		const rawParagraphs = article.content.split('\n').filter((line) => line.trim().length > 0);
+		const paragraphs = rawParagraphs.map((p) => {
+			return {
+				type: 'paragraph',
+				content: [{ type: 'text', text: p }]
+			};
+		});
+		const articleContent = {
+			type: 'doc',
+			content: paragraphs
+		};
 		await prisma.article.upsert({
 			where: { id: article.id },
 			update: {
 				title: article.title,
-				content: article.content
+				content: JSON.stringify(articleContent)
 			},
 			create: {
 				id: article.id,
 				title: article.title,
-				content: article.content
+				content: JSON.stringify(articleContent)
 			}
 		});
-		const paragraphs = article.content.split('\n').filter((line) => line.trim().length > 0);
 		for (const [i, paragraph] of paragraphs.entries()) {
-			await prisma.paragraph.create({
+			await prisma.node.create({
 				data: {
 					articleId: article.id,
-					text: paragraph,
+					value: JSON.stringify(paragraph),
 					order: i
 				}
 			});
